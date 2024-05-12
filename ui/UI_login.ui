@@ -70,7 +70,7 @@ QPushButton{
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="registerPage_2">
         <layout class="QVBoxLayout" name="verticalLayout_7">

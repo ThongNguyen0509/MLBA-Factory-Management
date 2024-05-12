@@ -8,7 +8,6 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 
-import ui.resources
 class Ui_MLWindow(object):
     def setupUi(self, MLWindow):
         MLWindow.setObjectName("MLWindow")
