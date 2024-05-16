@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1120</width>
-    <height>680</height>
+    <width>1132</width>
+    <height>749</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,8 +25,8 @@
      <rect>
       <x>10</x>
       <y>70</y>
-      <width>1081</width>
-      <height>541</height>
+      <width>1111</width>
+      <height>631</height>
      </rect>
     </property>
     <property name="mouseTracking">
@@ -45,7 +45,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="iconSize">
      <size>
@@ -69,6 +69,9 @@
      <bool>false</bool>
     </property>
     <widget class="QWidget" name="tab">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <attribute name="icon">
       <iconset>
        <normaloff>../image/img_employee.png</normaloff>../image/img_employee.png</iconset>
@@ -235,13 +238,16 @@ color: rgb(0, 0, 0);
         <x>30</x>
         <y>140</y>
         <width>841</width>
-        <height>371</height>
+        <height>441</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3"/>
      </widget>
     </widget>
     <widget class="QWidget" name="ML">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <attribute name="icon">
       <iconset>
        <normaloff>../image/img_efficiency.png</normaloff>../image/img_efficiency.png</iconset>
@@ -313,7 +319,7 @@ color: rgb(0, 0, 0);
         <string>Train model</string>
        </property>
       </widget>
-      <widget class="QListWidget" name="listWidget">
+      <widget class="QListWidget" name="lw_MLData">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -324,7 +330,7 @@ color: rgb(0, 0, 0);
        </property>
        <item>
         <property name="text">
-         <string>Dexterxity</string>
+         <string>Gender</string>
         </property>
         <property name="checkState">
          <enum>Unchecked</enum>
@@ -332,7 +338,39 @@ color: rgb(0, 0, 0);
        </item>
        <item>
         <property name="text">
-         <string>Worker Supervisor Age Diff</string>
+         <string>Age</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Health</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Commitment</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Perceptiveness</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dexterxity</string>
         </property>
         <property name="checkState">
          <enum>Unchecked</enum>
@@ -372,23 +410,7 @@ color: rgb(0, 0, 0);
        </item>
        <item>
         <property name="text">
-         <string>Health</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Commitment</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Perceptiveness</string>
+         <string>Worker Supervisor Age Diff</string>
         </property>
         <property name="checkState">
          <enum>Unchecked</enum>
@@ -477,17 +499,17 @@ color: rgb(0, 0, 0);
         <x>30</x>
         <y>170</y>
         <width>791</width>
-        <height>341</height>
+        <height>361</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout"/>
+      <layout class="QVBoxLayout" name="vl_efficiency"/>
      </widget>
      <widget class="QGroupBox" name="gb_modelUsage">
       <property name="geometry">
        <rect>
         <x>830</x>
         <y>10</y>
-        <width>201</width>
+        <width>261</width>
         <height>281</height>
        </rect>
       </property>
@@ -499,15 +521,18 @@ color: rgb(0, 0, 0);
         <rect>
          <x>20</x>
          <y>30</y>
-         <width>160</width>
+         <width>231</width>
          <height>231</height>
         </rect>
        </property>
-       <layout class="QFormLayout" name="formLayout"/>
+       <layout class="QFormLayout" name="fl_modelUsage"/>
       </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="ChurnTab">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <attribute name="icon">
       <iconset>
        <normaloff>../image/img_churn.png</normaloff>../image/img_churn.png</iconset>
@@ -594,7 +619,7 @@ color: rgb(0, 0, 0);
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>800</x>
+      <x>820</x>
       <y>10</y>
       <width>31</width>
       <height>31</height>
@@ -616,7 +641,7 @@ color: rgb(0, 0, 0);
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>840</x>
+      <x>860</x>
       <y>10</y>
       <width>41</width>
       <height>31</height>
@@ -631,7 +656,7 @@ color: rgb(0, 0, 0);
      <rect>
       <x>0</x>
       <y>50</y>
-      <width>1091</width>
+      <width>1121</width>
       <height>21</height>
      </rect>
     </property>
@@ -690,7 +715,7 @@ border-color: rgb(0, 0, 127);</string>
    <widget class="QPushButton" name="b_changeProfile">
     <property name="geometry">
      <rect>
-      <x>900</x>
+      <x>920</x>
       <y>10</y>
       <width>101</width>
       <height>31</height>
@@ -703,7 +728,7 @@ border-color: rgb(0, 0, 127);</string>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>1020</x>
+      <x>1050</x>
       <y>10</y>
       <width>75</width>
       <height>31</height>
@@ -719,7 +744,7 @@ border-color: rgb(0, 0, 127);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1120</width>
+     <width>1132</width>
      <height>21</height>
     </rect>
    </property>
