@@ -294,7 +294,7 @@ class Ui_MLWindow(object):
         MLWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MLWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MLWindow)
 
     def retranslateUi(self, MLWindow):

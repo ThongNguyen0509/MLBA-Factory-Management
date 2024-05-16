@@ -1,9 +1,8 @@
-#MLEx.py
 from connector.Connector import Connector
 from ui.ML_ui import Ui_MLWindow
 from utils.FileUtil import FileUtil
 import traceback
-from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLabel, QLineEdit, QFrame, QListWidgetItem, QFormLayout, QPushButton
+from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLabel, QLineEdit, QFrame, QListWidgetItem, QFormLayout, QPushButton, QProgressDialog, QProgressBar
 from datetime import datetime
 from PyQt6.QtCore import Qt, QSize, QObject, pyqtSignal, QThread
 import pandas as pd
@@ -18,53 +17,61 @@ import seaborn as sns
 import threading
 
 class ModelWorker(QThread):
-    train_done = pyqtSignal(object)
-    visualize_done = pyqtSignal()
-    error_occurred = pyqtSignal(str)
+   train_done = pyqtSignal(object)
+   visualize_done = pyqtSignal()
+   error_occurred = pyqtSignal(str)
+   progress_updated = pyqtSignal(int)
+   def __init__(self, selected_columns, parent=None):
+       super().__init__(parent)
+       self.selected_columns = selected_columns
+       self.connector = Connector()
 
-    def __init__(self, selected_columns, parent=None):
-        super().__init__(parent)
-        self.selected_columns = selected_columns
-        self.connector = Connector()
+   def connectdb(self):
+       self.connector.server = "localhost"
+       self.connector.port = 3306
+       self.connector.database = "factorymanagement"
+       self.connector.username = "root"
+       self.connector.password = "@Obama123"
+       self.connector.connect()
 
-    def connectdb(self):
-        self.connector.server = "localhost"
-        self.connector.port = 3306
-        self.connector.database = "factorymanagement"
-        self.connector.username = "root"
-        self.connector.password = "@Obama123"
-        self.connector.connect()
+   def run(self):
+       try:
+           self.connectdb()
+           if not self.selected_columns:
+               self.error_occurred.emit("Please select at least one column to train the model.")
+               return
 
-    def run(self):
-        try:
-            self.connectdb()
-            if not self.selected_columns:
-                self.error_occurred.emit("Please select at least one column to train the model.")
-                return
+           sql = "SELECT * FROM factory WHERE record_comptype = 'Efficacy'"
+           df = self.connector.queryDataset(sql)
+           X = df[self.selected_columns]
+           y = df['actual_efficacy_h']
+           categorical_columns = [col for col in self.selected_columns if col == 'sub_sex']
+           numerical_columns = [col for col in self.selected_columns if col != 'sub_sex']
+           preprocessor = ColumnTransformer(
+               transformers=[
+                   ('encoder', OneHotEncoder(), categorical_columns),
+                   ('scaler', StandardScaler(), numerical_columns)
+               ], remainder='passthrough'
+           )
+           model = RandomForestRegressor()
+           pipeline = Pipeline([
+               ('preprocessor', preprocessor),
+               ('regressor', model)
+           ])
+           total_steps = 3  
+           step = 1
+           self.progress_updated.emit(int(step / total_steps * 100))
+           pipeline.fit(X, y)
+           step += 1
+           self.progress_updated.emit(int(step / total_steps * 100))
+           step += 1
+           self.progress_updated.emit(int(step / total_steps * 100))
 
-            sql = "SELECT * FROM factory WHERE record_comptype = 'Efficacy'"
-            df = self.connector.queryDataset(sql)
-            X = df[self.selected_columns]
-            y = df['actual_efficacy_h']
-            categorical_columns = [col for col in self.selected_columns if col == 'sub_sex']
-            numerical_columns = [col for col in self.selected_columns if col != 'sub_sex']
-            preprocessor = ColumnTransformer(
-                transformers=[
-                    ('encoder', OneHotEncoder(), categorical_columns),
-                    ('scaler', StandardScaler(), numerical_columns)
-                ], remainder='passthrough'
-            )
-            model = RandomForestRegressor()
-            pipeline = Pipeline([
-                ('preprocessor', preprocessor),
-                ('regressor', model)
-            ])
-            pipeline.fit(X, y)
-            self.train_done.emit(pipeline)
-        except Exception as e:
-            error_message = f"An error occurred: {e}"
-            self.error_occurred.emit(error_message)
-            traceback.print_exc()
+           self.train_done.emit(pipeline)
+       except Exception as e:
+           error_message = f"An error occurred: {e}"
+           self.error_occurred.emit(error_message)
+           traceback.print_exc()
 
 class MLEx(Ui_MLWindow):
     def __init__(self):
@@ -95,8 +102,9 @@ class MLEx(Ui_MLWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
-        self.b_saveEfficiency.clicked.connect(self.save_ml_model)
-        self.b_loadEfficiency.clicked.connect(self.load_ml_model)
+        self.b_trainEfficiency.clicked.connect(self.train_model)
+        self.b_saveEfficiency.clicked.connect(self.save_model)
+        self.b_loadEfficiency.clicked.connect(self.load_model)
         self.b_visualizeEfficiency.clicked.connect(self.VisualRandomForest)
         self.populate_column_list()
         self.setupPlot()
@@ -130,19 +138,48 @@ class MLEx(Ui_MLWindow):
             item.setCheckState(Qt.CheckState.Unchecked)
             self.lw_MLData.addItem(item)
             
-    def save_ml_model(self):
+    def train_model(self):
         selected_columns = self.get_selected_columns()
         if not selected_columns:
             QMessageBox.warning(self.MainWindow, "Warning", "Please select at least one column to train the model.")
             return
-
+        self.progress_label = QLabel("Progress:")
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setValue(0)
+        self.fl_modelUsage.addRow(self.progress_label, self.progress_bar)
+        self.update_progress_bar()
         self.worker = ModelWorker(selected_columns)
-        self.worker.train_done.connect(self.on_train_done)
+        self.worker.train_done.connect(self.create_model_usage_ui)
         self.worker.error_occurred.connect(self.on_error_occurred)
+        self.worker.progress_updated.connect(self.update_progress_bar)
         self.worker.start()
 
+    def update_progress_bar(self, value=0):
+        self.progress_bar.setValue(value)
 
-    def on_train_done(self, trained_pipeline):
+    def create_model_usage_ui(self, trained_pipeline):
+        self.model = trained_pipeline
+
+        while self.fl_modelUsage.rowCount() > 0:
+            self.fl_modelUsage.removeRow(0)
+
+        independent_columns = trained_pipeline[:-1].get_feature_names_out()
+
+        for column_name in independent_columns:
+            line_edit = QLineEdit()
+            self.fl_modelUsage.addRow(column_name.replace('scaler__',''), line_edit)
+        efficacy_label = QLabel("Predicted Efficacy:")
+        predicted_value_label = QLabel("") 
+        predicted_value_label.setStyleSheet("font-weight: bold;") 
+        self.fl_modelUsage.addRow(efficacy_label, predicted_value_label)
+        predict_button = QPushButton("Predict")
+        predict_button.clicked.connect(lambda: self.update_predicted_value(predicted_value_label))
+        self.fl_modelUsage.addRow(predict_button)
+
+    def save_model(self):
+        if not self.model:
+            QMessageBox.warning(self.MainWindow, "Warning", "No trained model available to save.")
+            return
         file_dialog = QFileDialog()
         file_dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptSave)
         file_dialog.setNameFilter("Pickle files (*.pkl)")
@@ -150,15 +187,15 @@ class MLEx(Ui_MLWindow):
             selected_files = file_dialog.selectedFiles()
             if selected_files:
                 file_path = selected_files[0]
-                if FileUtil.saveModel(trained_pipeline, file_path):
+                if FileUtil.saveModel(self.model, file_path):
                     QMessageBox.information(self.MainWindow, "Success", "Model saved successfully.")
                 else:
                     QMessageBox.warning(self.MainWindow, "Error", "Failed to save the model.")
 
     def on_error_occurred(self, error_message):
         QMessageBox.warning(self.MainWindow, "Error", error_message)
-        
-    def load_ml_model(self):
+
+    def load_model(self):
         file_dialog = QFileDialog()
         file_dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
         file_dialog.setNameFilter("Pickle files (*.pkl)")
@@ -170,22 +207,7 @@ class MLEx(Ui_MLWindow):
                 if loaded_pipeline:
                     self.model = loaded_pipeline
                     QMessageBox.information(self.MainWindow, "Success", "Model loaded successfully.")
-
-                    while self.fl_modelUsage.rowCount() > 0:
-                        self.fl_modelUsage.removeRow(0)
-
-                    independent_columns = loaded_pipeline[:-1].get_feature_names_out()
-
-                    for column_name in independent_columns:
-                        line_edit = QLineEdit()
-                        self.fl_modelUsage.addRow(column_name.replace('scaler__',''), line_edit)
-                    efficacy_label = QLabel("Predicted Efficacy:")
-                    predicted_value_label = QLabel("") 
-                    predicted_value_label.setStyleSheet("font-weight: bold;") 
-                    self.fl_modelUsage.addRow(efficacy_label, predicted_value_label)
-                    predict_button = QPushButton("Predict")
-                    predict_button.clicked.connect(lambda: self.update_predicted_value(predicted_value_label))
-                    self.fl_modelUsage.addRow(predict_button)
+                    self.create_model_usage_ui(loaded_pipeline)
                 else:
                     QMessageBox.warning(self.MainWindow, "Error", "Failed to load the model.")
 
@@ -196,7 +218,6 @@ class MLEx(Ui_MLWindow):
             if item:
                 input_value = item.widget().text()
                 input_values.append(input_value)
-
         try:
             for i in range(len(input_values)):
                 try:
@@ -209,10 +230,7 @@ class MLEx(Ui_MLWindow):
                 input_data[col_name] = [value]
             input_df = pd.DataFrame(input_data)
             transformed_input = self.model.named_steps['preprocessor'].transform(input_df)
-            print("Transformed Input Data:")
-            print(transformed_input)
             predicted_value = self.model.named_steps['regressor'].predict(transformed_input)
-            print("Predicted Value:", predicted_value)
             predicted_value_label.setText(str(round(predicted_value[0],2)))
         except Exception as e:
             traceback.print_exc()
