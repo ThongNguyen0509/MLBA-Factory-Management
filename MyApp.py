@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow
-from ui.MainWindowEx import MainWindowEx
+from ui.ChangeInformationFunc import ChangeInformaion
 
 app = QApplication([])
 mainWindow = QMainWindow()
-myWindow = MainWindowEx()
+myWindow = ChangeInformaion()
 myWindow.setupUi(QMainWindow())
 myWindow.show()
 app.exec()

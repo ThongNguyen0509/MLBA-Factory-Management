@@ -7,9 +7,9 @@ class LoginEx(Ui_MainWindow):
     def connectdb(self):
         self.connector.server = "localhost"
         self.connector.port = 3306
-        self.connector.database = "retails"
+        self.connector.database = "factorymanagement"
         self.connector.username = "root"
-        self.connector.password = "@Obama123"
+        self.connector.password = "609618"
         self.connector.connect()
     
     def setupUi(self, MainWindow):
