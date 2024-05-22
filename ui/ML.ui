@@ -45,7 +45,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="iconSize">
      <size>
@@ -68,7 +68,7 @@
     <property name="tabBarAutoHide">
      <bool>false</bool>
     </property>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="Cluster">
      <attribute name="icon">
       <iconset>
        <normaloff>../image/img_employee.png</normaloff>../image/img_employee.png</iconset>
@@ -99,7 +99,7 @@
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
-      <widget class="QComboBox" name="comboBox_5">
+      <widget class="QComboBox" name="cb_Role">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -123,17 +123,7 @@
        </item>
        <item>
         <property name="text">
-         <string>Shift Manager</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>Leam Leader</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Production Director</string>
         </property>
        </item>
       </widget>
@@ -153,7 +143,7 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#00007f;&quot;&gt;Role&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="b_ClusterModel_4">
+      <widget class="QPushButton" name="b_SeeCluster">
        <property name="geometry">
         <rect>
          <x>480</x>
@@ -241,7 +231,7 @@ color: rgb(0, 0, 0);
       <layout class="QVBoxLayout" name="verticalLayout_3"/>
      </widget>
     </widget>
-    <widget class="QWidget" name="ML">
+    <widget class="QWidget" name="Efficiency">
      <attribute name="icon">
       <iconset>
        <normaloff>../image/img_efficiency.png</normaloff>../image/img_efficiency.png</iconset>
@@ -714,14 +704,20 @@ border-color: rgb(0, 0, 127);</string>
     </property>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QMenuBar" name="System">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>1120</width>
-     <height>21</height>
+     <height>18</height>
     </rect>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
