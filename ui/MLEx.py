@@ -2,6 +2,9 @@ from connector.Connector import Connector
 from ui.ML_ui import Ui_MLWindow
 from utils.FileUtil import FileUtil
 import traceback
+from xgboost import XGBRegressor
+from lightgbm import LGBMRegressor
+from sklearn.metrics import mean_squared_error, r2_score
 from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLabel, QLineEdit, QFrame, QListWidgetItem, QFormLayout, QPushButton, QProgressDialog, QProgressBar
 from datetime import datetime
 from PyQt6.QtCore import Qt, QSize, QObject, pyqtSignal, QThread
@@ -25,7 +28,19 @@ class ModelWorker(QThread):
        super().__init__(parent)
        self.selected_columns = selected_columns
        self.connector = Connector()
-
+       self.columns_mapping = {
+            'Gender':'sub_sex',
+            'Age': 'sub_age',
+            'Health':'sub_health_h',
+            'Commitment':'sub_commitment_h',
+            'Perceptiveness':'sub_perceptiveness_h',
+            'Dexterxity':'sub_dexterity_h',
+            'Sociality':'sub_sociality_h',
+            'Goodness':'sub_goodness_h',
+            'Strength': 'sub_strength_h',
+            'Open-minded': 'sub_openmindedness_h',
+            'Worker Supervisor Age Diff':'sup_sub_age_diff'            
+        }
    def connectdb(self):
        self.connector.server = "localhost"
        self.connector.port = 3306
@@ -33,45 +48,109 @@ class ModelWorker(QThread):
        self.connector.username = "root"
        self.connector.password = "@Obama123"
        self.connector.connect()
+   def evaluate_models(self, X, y):
+        models = [
+            ("Random Forest", RandomForestRegressor()),
+            ("XGBoost", XGBRegressor()),
+            ("LightGBM", LGBMRegressor())
+        ]
 
+        best_model = None
+        best_score = float('-inf')
+
+        for name, model in models:
+            pipeline = Pipeline([
+                ('preprocessor', self.preprocessor),
+                ('regressor', model)
+            ])
+            pipeline.fit(X, y)
+            y_pred = pipeline.predict(X)
+            mse = mean_squared_error(y, y_pred)
+            r2 = r2_score(y, y_pred)
+            print(f"{name} - MSE: {mse:.2f}, R2: {r2:.2f}")
+            if r2 > best_score:
+                best_model = pipeline
+                best_score = r2
+
+        return best_model
+   
    def run(self):
-       try:
-           self.connectdb()
-           if not self.selected_columns:
-               self.error_occurred.emit("Please select at least one column to train the model.")
-               return
+    try:
+        self.connectdb()
+        if not self.selected_columns:
+            self.error_occurred.emit("Please select at least one column to train the model.")
+            return
 
-           sql = "SELECT * FROM factory WHERE record_comptype = 'Efficacy'"
-           df = self.connector.queryDataset(sql)
-           X = df[self.selected_columns]
-           y = df['actual_efficacy_h']
-           categorical_columns = [col for col in self.selected_columns if col == 'sub_sex']
-           numerical_columns = [col for col in self.selected_columns if col != 'sub_sex']
-           preprocessor = ColumnTransformer(
-               transformers=[
-                   ('encoder', OneHotEncoder(), categorical_columns),
-                   ('scaler', StandardScaler(), numerical_columns)
-               ], remainder='passthrough'
-           )
-           model = RandomForestRegressor()
-           pipeline = Pipeline([
-               ('preprocessor', preprocessor),
-               ('regressor', model)
-           ])
-           total_steps = 3  
-           step = 1
-           self.progress_updated.emit(int(step / total_steps * 100))
-           pipeline.fit(X, y)
-           step += 1
-           self.progress_updated.emit(int(step / total_steps * 100))
-           step += 1
-           self.progress_updated.emit(int(step / total_steps * 100))
+        sql = '''SELECT sub_age, sub_health_h, sub_commitment_h, sub_perceptiveness_h, sub_dexterity_h, 
+                sub_sociality_h, sub_goodness_h, sub_strength_h, sub_openmindedness_h, sup_sub_age_diff, actual_efficacy_h FROM factory WHERE record_comptype = "Efficacy"
+            '''
+        df = self.connector.queryDataset(sql)
+        X = df[self.selected_columns]
+        y = df['actual_efficacy_h']
+        categorical_columns = [col for col in self.selected_columns if col == 'sub_sex']
+        numerical_columns = [col for col in self.selected_columns if col != 'sub_sex']
+        self.preprocessor = ColumnTransformer(
+            transformers=[
+                ('encoder', OneHotEncoder(), categorical_columns),
+                ('scaler', StandardScaler(), numerical_columns)
+            ], remainder='passthrough'
+        )
 
-           self.train_done.emit(pipeline)
-       except Exception as e:
-           error_message = f"An error occurred: {e}"
-           self.error_occurred.emit(error_message)
-           traceback.print_exc()
+        total_steps = 4  
+        step = 1
+        self.progress_updated.emit(int(step / total_steps * 100))
+        best_model = self.evaluate_models(X, y)
+        step += 1
+        self.progress_updated.emit(int(step / total_steps * 100))
+        step += 1
+        self.progress_updated.emit(int(step / total_steps * 100))
+        step += 1
+        self.progress_updated.emit(int(step / total_steps * 100))
+
+        self.train_done.emit(best_model)
+    except Exception as e:
+        error_message = f"An error occurred: {e}"
+        self.error_occurred.emit(error_message)
+        traceback.print_exc()
+
+class VisWorker(QThread):
+    vis_done = pyqtSignal(object)
+
+    def __init__(self, model, selected_columns, parent=None):
+        super().__init__(parent)
+        self.model = model
+        self.selected_columns = selected_columns
+        self.connector = Connector()
+
+    def connectdb(self):
+        self.connector.server = "localhost"
+        self.connector.port = 3306
+        self.connector.database = "factorymanagement"
+        self.connector.username = "root"
+        self.connector.password = "@Obama123"
+        self.connector.connect()
+
+    def run(self):
+        try:
+            self.connectdb()
+            sql = '''SELECT sub_age, sub_health_h, sub_commitment_h, sub_perceptiveness_h, sub_dexterity_h, 
+                sub_sociality_h, sub_goodness_h, sub_strength_h, sub_openmindedness_h, sup_sub_age_diff, actual_efficacy_h FROM factory WHERE record_comptype = "Efficacy"
+            '''
+            df = self.connector.queryDataset(sql)
+            df = df.dropna()
+            X = df[self.selected_columns]
+            y = df['actual_efficacy_h']
+            pipeline = self.model
+
+            pipeline.fit(X, y)
+            y_pred = pipeline.predict(X)
+
+            self.vis_done.emit((y, y_pred))
+
+        except Exception as e:
+            error_message = f"An error occurred: {e}"
+            print(error_message)
+            traceback.print_exc()
 
 class MLEx(Ui_MLWindow):
     def __init__(self):
@@ -105,8 +184,7 @@ class MLEx(Ui_MLWindow):
         self.b_trainEfficiency.clicked.connect(self.train_model)
         self.b_saveEfficiency.clicked.connect(self.save_model)
         self.b_loadEfficiency.clicked.connect(self.load_model)
-        self.b_visualizeEfficiency.clicked.connect(self.VisualRandomForest)
-        self.populate_column_list()
+        self.b_visualizeEfficiency.clicked.connect(self.visualize_efficiency_prediction)
         self.setupPlot()
 
     def setupPlot(self):
@@ -129,15 +207,15 @@ class MLEx(Ui_MLWindow):
                 db_column_name = self.columns_mapping.get(ui_text, ui_text)
                 selected_columns.append(db_column_name)
         return selected_columns
-
+    
     def populate_column_list(self):
-        self.lw_MLData.clear()
-        for ui_text in self.columns_mapping.keys():
-            item = QListWidgetItem(ui_text)
+        self.lw_MLData.clear() 
+        for column_name, db_column_name in self.columns_mapping.items():
+            item = QListWidgetItem(column_name)
             item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
             item.setCheckState(Qt.CheckState.Unchecked)
-            self.lw_MLData.addItem(item)
-            
+            self.lw_MLData.addItem(item)    
+
     def train_model(self):
         selected_columns = self.get_selected_columns()
         if not selected_columns:
@@ -163,11 +241,12 @@ class MLEx(Ui_MLWindow):
         while self.fl_modelUsage.rowCount() > 0:
             self.fl_modelUsage.removeRow(0)
 
-        independent_columns = trained_pipeline[:-1].get_feature_names_out()
-
+        independent_columns = [col.replace('encoder__', '').replace('scaler__', '') for col in trained_pipeline[:-1].get_feature_names_out()]
+        reverse_mapping = {v: k for k, v in self.columns_mapping.items()}
+        independent_columns = [reverse_mapping.get(col, col) for col in independent_columns]
         for column_name in independent_columns:
             line_edit = QLineEdit()
-            self.fl_modelUsage.addRow(column_name.replace('scaler__',''), line_edit)
+            self.fl_modelUsage.addRow(column_name, line_edit)
         efficacy_label = QLabel("Predicted Efficacy:")
         predicted_value_label = QLabel("") 
         predicted_value_label.setStyleSheet("font-weight: bold;") 
@@ -208,8 +287,20 @@ class MLEx(Ui_MLWindow):
                     self.model = loaded_pipeline
                     QMessageBox.information(self.MainWindow, "Success", "Model loaded successfully.")
                     self.create_model_usage_ui(loaded_pipeline)
+                    self.populate_column_list()
                 else:
                     QMessageBox.warning(self.MainWindow, "Error", "Failed to load the model.")
+                selected_columns = [col.replace('encoder__', '').replace('scaler__', '') for col in loaded_pipeline[:-1].get_feature_names_out()]
+                for i in range(self.lw_MLData.count()):
+                    item = self.lw_MLData.item(i)
+                    column_name = item.text()
+                    if column_name in self.columns_mapping.keys():
+                        db_column_name = self.columns_mapping[column_name]
+                        if db_column_name in selected_columns:
+                            item.setCheckState(Qt.CheckState.Checked)
+                        else:
+                            item.setCheckState(Qt.CheckState.Unchecked)
+
 
     def update_predicted_value(self, predicted_value_label):
         input_values = []
@@ -235,23 +326,43 @@ class MLEx(Ui_MLWindow):
         except Exception as e:
             traceback.print_exc()
 
-    def VisualRandomForest(self):
-        self.connectdb()
+    def visualize_efficiency_prediction(self):
+        if self.model is None:
+            QMessageBox.warning(self.MainWindow, "Warning", "Please train the model first.")
+            return
         selected_columns = self.get_selected_columns()
-        if not selected_columns:
-            raise ValueError("No columns selected for processing.")
-        sql = "SELECT * FROM factory WHERE record_comptype = 'Efficacy'"
-        df = self.connector.queryDataset(sql)
-        X = df[selected_columns]
-        y = df['actual_efficacy_h']
-        pipeline = self.process_data_for_model()
-        pipeline.fit(X, y)
-        y_pred = pipeline.predict(X)
-        self.figure.clear()
-        ax = self.figure.add_subplot(111)
-        ax.scatter(y, y_pred, alpha=0.5)
-        ax.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=3)
-        ax.set_title('Random Forest Regression')
-        ax.set_xlabel('Actual Values')
-        ax.set_ylabel('Predicted Values')
-        self.canvas.draw()
+        self.vis_worker = VisWorker(self.model, selected_columns)
+        self.vis_worker.vis_done.connect(self.update_vis_plot)
+        self.vis_worker.start()
+
+
+    def update_vis_plot(self, data):
+        try:
+            y, y_pred = data
+            y = pd.to_numeric(y, errors='coerce')
+            y_pred = pd.to_numeric(y_pred, errors='coerce')
+            self.figure.clear()
+            self.figure.set_size_inches(8, 3.8)
+            ax = self.figure.add_subplot(111)
+            ax.ticklabel_format(useOffset=False, style='plain')
+            ax.grid()
+            x_interval = len(y) // 5
+            y_min = min(min(y), min(y_pred))
+            y_max = max(max(y), max(y_pred))
+            y_interval = (y_max - y_min) / 10
+            x_ticks = range(0, len(y), x_interval)
+            y_ticks = [y_min + i * y_interval for i in range(5)]
+            ax.set_xticks(x_ticks)
+            ax.set_yticks(y_ticks)
+            ax.plot(x_ticks, [y[i] for i in x_ticks], marker='o', linestyle='-', label='Actual Efficacy')
+            ax.plot(x_ticks, [y_pred[i] for i in x_ticks], marker='', linestyle='--', label='Predicted Efficacy')
+            ax.set_title('Efficacy Prediction')
+            ax.set_xlabel('Sample Index')
+            ax.set_ylabel('Efficacy')
+            ax.legend()
+            self.canvas.draw()
+        except AttributeError:
+            QMessageBox.warning(self.MainWindow, "Warning", "Please select at least one column to train the model.")
+        except Exception as e:
+            print(e)
+            print(y.dtypes,y_pred.dtypes)

@@ -195,7 +195,7 @@ class Ui_MLWindow(object):
 "")
         self.b_visualizeEfficiency.setObjectName("b_visualizeEfficiency")
         self.verticalLayoutWidget = QtWidgets.QWidget(parent=self.ML)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(30, 170, 791, 361))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(30, 170, 791, 421))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.vl_efficiency = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.vl_efficiency.setContentsMargins(0, 0, 0, 0)
