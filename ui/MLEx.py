@@ -1,13 +1,14 @@
+from multithread.EfficacyThread import VisWorker, ModelWorker
 from connector.Connector import Connector
 from ui.ML_ui import Ui_MLWindow
 from utils.FileUtil import FileUtil
 import traceback
 from xgboost import XGBRegressor
 from lightgbm import LGBMRegressor
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, r2_score, silhouette_score
 from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLabel, QLineEdit, QFrame, QListWidgetItem, QFormLayout, QPushButton, QProgressDialog, QProgressBar
 from datetime import datetime
-from PyQt6.QtCore import Qt, QSize, QObject, pyqtSignal, QThread
+from PyQt6.QtCore import Qt, QSize, QObject, pyqtSignal, QThread, QRunnable, QThreadPool, QVariant
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -17,140 +18,10 @@ from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import seaborn as sns
-import threading
-
-class ModelWorker(QThread):
-   train_done = pyqtSignal(object)
-   visualize_done = pyqtSignal()
-   error_occurred = pyqtSignal(str)
-   progress_updated = pyqtSignal(int)
-   def __init__(self, selected_columns, parent=None):
-       super().__init__(parent)
-       self.selected_columns = selected_columns
-       self.connector = Connector()
-       self.columns_mapping = {
-            'Gender':'sub_sex',
-            'Age': 'sub_age',
-            'Health':'sub_health_h',
-            'Commitment':'sub_commitment_h',
-            'Perceptiveness':'sub_perceptiveness_h',
-            'Dexterxity':'sub_dexterity_h',
-            'Sociality':'sub_sociality_h',
-            'Goodness':'sub_goodness_h',
-            'Strength': 'sub_strength_h',
-            'Open-minded': 'sub_openmindedness_h',
-            'Worker Supervisor Age Diff':'sup_sub_age_diff'            
-        }
-   def connectdb(self):
-       self.connector.server = "localhost"
-       self.connector.port = 3306
-       self.connector.database = "factorymanagement"
-       self.connector.username = "root"
-       self.connector.password = "@Obama123"
-       self.connector.connect()
-   def evaluate_models(self, X, y):
-        models = [
-            ("Random Forest", RandomForestRegressor()),
-            ("XGBoost", XGBRegressor()),
-            ("LightGBM", LGBMRegressor())
-        ]
-
-        best_model = None
-        best_score = float('-inf')
-
-        for name, model in models:
-            pipeline = Pipeline([
-                ('preprocessor', self.preprocessor),
-                ('regressor', model)
-            ])
-            pipeline.fit(X, y)
-            y_pred = pipeline.predict(X)
-            mse = mean_squared_error(y, y_pred)
-            r2 = r2_score(y, y_pred)
-            print(f"{name} - MSE: {mse:.2f}, R2: {r2:.2f}")
-            if r2 > best_score:
-                best_model = pipeline
-                best_score = r2
-
-        return best_model
-   
-   def run(self):
-    try:
-        self.connectdb()
-        if not self.selected_columns:
-            self.error_occurred.emit("Please select at least one column to train the model.")
-            return
-
-        sql = '''SELECT sub_age, sub_health_h, sub_commitment_h, sub_perceptiveness_h, sub_dexterity_h, 
-                sub_sociality_h, sub_goodness_h, sub_strength_h, sub_openmindedness_h, sup_sub_age_diff, actual_efficacy_h FROM factory WHERE record_comptype = "Efficacy"
-            '''
-        df = self.connector.queryDataset(sql)
-        X = df[self.selected_columns]
-        y = df['actual_efficacy_h']
-        categorical_columns = [col for col in self.selected_columns if col == 'sub_sex']
-        numerical_columns = [col for col in self.selected_columns if col != 'sub_sex']
-        self.preprocessor = ColumnTransformer(
-            transformers=[
-                ('encoder', OneHotEncoder(), categorical_columns),
-                ('scaler', StandardScaler(), numerical_columns)
-            ], remainder='passthrough'
-        )
-
-        total_steps = 4  
-        step = 1
-        self.progress_updated.emit(int(step / total_steps * 100))
-        best_model = self.evaluate_models(X, y)
-        step += 1
-        self.progress_updated.emit(int(step / total_steps * 100))
-        step += 1
-        self.progress_updated.emit(int(step / total_steps * 100))
-        step += 1
-        self.progress_updated.emit(int(step / total_steps * 100))
-
-        self.train_done.emit(best_model)
-    except Exception as e:
-        error_message = f"An error occurred: {e}"
-        self.error_occurred.emit(error_message)
-        traceback.print_exc()
-
-class VisWorker(QThread):
-    vis_done = pyqtSignal(object)
-
-    def __init__(self, model, selected_columns, parent=None):
-        super().__init__(parent)
-        self.model = model
-        self.selected_columns = selected_columns
-        self.connector = Connector()
-
-    def connectdb(self):
-        self.connector.server = "localhost"
-        self.connector.port = 3306
-        self.connector.database = "factorymanagement"
-        self.connector.username = "root"
-        self.connector.password = "@Obama123"
-        self.connector.connect()
-
-    def run(self):
-        try:
-            self.connectdb()
-            sql = '''SELECT sub_age, sub_health_h, sub_commitment_h, sub_perceptiveness_h, sub_dexterity_h, 
-                sub_sociality_h, sub_goodness_h, sub_strength_h, sub_openmindedness_h, sup_sub_age_diff, actual_efficacy_h FROM factory WHERE record_comptype = "Efficacy"
-            '''
-            df = self.connector.queryDataset(sql)
-            df = df.dropna()
-            X = df[self.selected_columns]
-            y = df['actual_efficacy_h']
-            pipeline = self.model
-
-            pipeline.fit(X, y)
-            y_pred = pipeline.predict(X)
-
-            self.vis_done.emit((y, y_pred))
-
-        except Exception as e:
-            error_message = f"An error occurred: {e}"
-            print(error_message)
-            traceback.print_exc()
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.inspection import permutation_importance
+from mpl_toolkits.mplot3d import Axes3D
 
 class MLEx(Ui_MLWindow):
     def __init__(self):
@@ -167,7 +38,8 @@ class MLEx(Ui_MLWindow):
             'Goodness':'sub_goodness_h',
             'Strength': 'sub_strength_h',
             'Open-minded': 'sub_openmindedness_h',
-            'Worker Supervisor Age Diff':'sup_sub_age_diff'            
+            'Worker Supervisor Age Diff':'sup_sub_age_diff' , 
+            'Efficacy':'efficacy'          
         }
 
     def connectdb(self):
@@ -177,23 +49,41 @@ class MLEx(Ui_MLWindow):
         self.connector.username = "root"
         self.connector.password = "@Obama123"
         self.connector.connect()
-    
+            
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
         self.b_trainEfficiency.clicked.connect(self.train_model)
         self.b_saveEfficiency.clicked.connect(self.save_model)
-        self.b_loadEfficiency.clicked.connect(self.load_model)
+        self.b_loadEfficiency.clicked.connect(self.load_model_predict)
         self.b_visualizeEfficiency.clicked.connect(self.visualize_efficiency_prediction)
-        self.setupPlot()
+        self.b_SaveCluster.clicked.connect(self.save_model)
+        self.b_TrainCluster.clicked.connect(self.perform_kmeans_clustering)
+        self.b_LoadCluster.clicked.connect(self.load_cluster_model)
+        self.setupPlotCluster()
+        self.setupPlotPrediction()
 
-    def setupPlot(self):
+    def on_training_started(self):
+        print("KMeans training started.")
+
+    def on_training_completed(self):
+        print("KMeans training completed.")
+
+    def setupPlotPrediction(self):
         figsize = (8, 6)
-        self.figure = plt.figure(figsize=figsize)
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self.MainWindow)
-        self.vl_efficiency.addWidget(self.toolbar)
-        self.vl_efficiency.addWidget(self.canvas)
+        self.figurePrediction = plt.figure(figsize=figsize)
+        self.canvasPrediction = FigureCanvas(self.figurePrediction)
+        self.toolbarPrediction = NavigationToolbar(self.canvasPrediction, self.MainWindow)
+        self.vl_efficiency.addWidget(self.toolbarPrediction)
+        self.vl_efficiency.addWidget(self.canvasPrediction)
+
+    def setupPlotCluster(self):
+        figsize = (8, 6)
+        self.figureCluster = plt.figure(figsize=figsize)
+        self.canvasCluster = FigureCanvas(self.figureCluster)
+        self.toolbarCluster = NavigationToolbar(self.canvasCluster, self.MainWindow)
+        self.vl_VisualizeCluster.addWidget(self.toolbarCluster)
+        self.vl_VisualizeCluster.addWidget(self.canvasCluster)
 
     def show(self):
         self.MainWindow.show()
@@ -256,9 +146,20 @@ class MLEx(Ui_MLWindow):
         self.fl_modelUsage.addRow(predict_button)
 
     def save_model(self):
-        if not self.model:
-            QMessageBox.warning(self.MainWindow, "Warning", "No trained model available to save.")
+        button = self.MainWindow.sender()
+        if button == self.b_saveEfficiency:
+            if not self.model:
+                QMessageBox.warning(self.MainWindow, "Warning", "No trained model available to save.")
+                return
+            obj_to_save = self.model
+        elif button == self.b_SaveCluster:
+            if self.cluster is None or self.cluster.empty:
+                QMessageBox.warning(self.MainWindow, "Warning", "No trained cluster model available to save.")
+                return
+            obj_to_save = self.cluster
+        else:
             return
+
         file_dialog = QFileDialog()
         file_dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptSave)
         file_dialog.setNameFilter("Pickle files (*.pkl)")
@@ -266,15 +167,18 @@ class MLEx(Ui_MLWindow):
             selected_files = file_dialog.selectedFiles()
             if selected_files:
                 file_path = selected_files[0]
-                if FileUtil.saveModel(self.model, file_path):
-                    QMessageBox.information(self.MainWindow, "Success", "Model saved successfully.")
+                if FileUtil.saveModel(obj_to_save, file_path):
+                    if button == self.b_saveEfficiency:
+                        QMessageBox.information(self.MainWindow, "Success", "Model saved successfully.")
+                    else:
+                        QMessageBox.information(self.MainWindow, "Success", "Cluster model saved successfully.")
                 else:
-                    QMessageBox.warning(self.MainWindow, "Error", "Failed to save the model.")
+                    QMessageBox.warning(self.MainWindow, "Error", "Failed to save the model/cluster model.")
 
     def on_error_occurred(self, error_message):
         QMessageBox.warning(self.MainWindow, "Error", error_message)
 
-    def load_model(self):
+    def load_model_predict(self):
         file_dialog = QFileDialog()
         file_dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
         file_dialog.setNameFilter("Pickle files (*.pkl)")
@@ -282,24 +186,27 @@ class MLEx(Ui_MLWindow):
             selected_files = file_dialog.selectedFiles()
             if selected_files:
                 file_path = selected_files[0]
-                loaded_pipeline = FileUtil.loadModel(file_path)
-                if loaded_pipeline:
-                    self.model = loaded_pipeline
-                    QMessageBox.information(self.MainWindow, "Success", "Model loaded successfully.")
-                    self.create_model_usage_ui(loaded_pipeline)
-                    self.populate_column_list()
+                loaded_object = FileUtil.loadModel(file_path)
+                if loaded_object is not None:
+                    if isinstance(loaded_object, Pipeline): 
+                        self.model = loaded_object
+                        QMessageBox.information(self.MainWindow, "Success", "Model loaded successfully.")
+                        self.create_model_usage_ui(loaded_object)
+                        self.populate_column_list()
+                        selected_columns = [col.replace('encoder__', '').replace('scaler__', '') for col in loaded_object[:-1].get_feature_names_out()]
+                        for i in range(self.lw_MLData.count()):
+                            item = self.lw_MLData.item(i)
+                            column_name = item.text()
+                            if column_name in self.columns_mapping.keys():
+                                db_column_name = self.columns_mapping[column_name]
+                                if db_column_name in selected_columns:
+                                    item.setCheckState(Qt.CheckState.Checked)
+                                else:
+                                    item.setCheckState(Qt.CheckState.Unchecked)
+                    else:
+                        QMessageBox.warning(self.MainWindow, "Warning", "The loaded file is not a regression model. Please load a regression model for predicting efficacy.")
                 else:
                     QMessageBox.warning(self.MainWindow, "Error", "Failed to load the model.")
-                selected_columns = [col.replace('encoder__', '').replace('scaler__', '') for col in loaded_pipeline[:-1].get_feature_names_out()]
-                for i in range(self.lw_MLData.count()):
-                    item = self.lw_MLData.item(i)
-                    column_name = item.text()
-                    if column_name in self.columns_mapping.keys():
-                        db_column_name = self.columns_mapping[column_name]
-                        if db_column_name in selected_columns:
-                            item.setCheckState(Qt.CheckState.Checked)
-                        else:
-                            item.setCheckState(Qt.CheckState.Unchecked)
 
 
     def update_predicted_value(self, predicted_value_label):
@@ -335,15 +242,14 @@ class MLEx(Ui_MLWindow):
         self.vis_worker.vis_done.connect(self.update_vis_plot)
         self.vis_worker.start()
 
-
     def update_vis_plot(self, data):
         try:
             y, y_pred = data
             y = pd.to_numeric(y, errors='coerce')
             y_pred = pd.to_numeric(y_pred, errors='coerce')
-            self.figure.clear()
-            self.figure.set_size_inches(8, 3.8)
-            ax = self.figure.add_subplot(111)
+            self.figurePrediction.clear()
+            self.figurePrediction.set_size_inches(8, 3.8)
+            ax = self.figurePrediction.add_subplot(111)
             ax.ticklabel_format(useOffset=False, style='plain')
             ax.grid()
             x_interval = len(y) // 5
@@ -360,9 +266,107 @@ class MLEx(Ui_MLWindow):
             ax.set_xlabel('Sample Index')
             ax.set_ylabel('Efficacy')
             ax.legend()
-            self.canvas.draw()
-        except AttributeError:
-            QMessageBox.warning(self.MainWindow, "Warning", "Please select at least one column to train the model.")
+            self.canvasPrediction.draw()
         except Exception as e:
             print(e)
-            print(y.dtypes,y_pred.dtypes)
+
+    def perform_kmeans_clustering(self):
+        try:
+            self.connectdb()
+            sql = '''SELECT sub_ID, sub_age, sub_health_h, sub_commitment_h, sub_perceptiveness_h, sub_dexterity_h,
+                            sub_sociality_h, sup_sub_age_diff, sub_goodness_h, sub_strength_h, sub_openmindedness_h, actual_efficacy_h
+                            FROM factory WHERE record_comptype = "Efficacy"'''
+            df = self.connector.queryDataset(sql)
+            if df is not None:
+                filtered_df = df[['sub_ID', 'sub_age', 'sub_health_h', 'sub_commitment_h', 'sub_perceptiveness_h', 'sub_dexterity_h',
+                                'sub_sociality_h', 'sub_goodness_h', 'sub_strength_h', 'sub_openmindedness_h',
+                                'sup_sub_age_diff', 'actual_efficacy_h']]
+
+                X = filtered_df.drop('actual_efficacy_h', axis=1)
+                y = filtered_df['actual_efficacy_h']
+
+                best_features = self.evaluate_feature_importance_for_clustering(X, y)
+                print(f"Best features: {best_features}")
+
+                numeric_features = [feature for feature in best_features if pd.api.types.is_numeric_dtype(filtered_df[feature])]
+
+                worker_stats = filtered_df.groupby('sub_ID').agg(
+                    mean_efficacy=('actual_efficacy_h', 'mean'),
+                    **{f'mean_{feature}': (feature, 'mean') for feature in numeric_features}
+                ).reset_index()
+
+                data = worker_stats[['mean_efficacy'] + [f'mean_{feature}' for feature in numeric_features]]
+                optimal_clusters = self.find_optimal_clusters(data)
+                print(f"Optimal number of clusters: {optimal_clusters}")
+
+                kmeans = KMeans(n_clusters=optimal_clusters, random_state=42)
+
+                data['efficacy_cluster'] = kmeans.fit_predict(data)
+                self.cluster = data
+                self.visualize_kmeans_clustering()
+        except Exception as e:
+            QMessageBox.warning(self.MainWindow, "Error", str(e))
+            traceback.print_exc()
+
+    def evaluate_feature_importance_for_clustering(self, X, y):
+        model = KMeans(n_clusters=3, random_state=0)
+        model.fit(X)
+        result = permutation_importance(model, X, y, scoring='neg_mean_squared_error', n_jobs=-1)
+        sorted_indices = result.importances_mean.argsort()[::-1]
+        sorted_features = X.columns[sorted_indices]
+        return sorted_features[:3]
+
+    def find_optimal_clusters(self, data, max_clusters=10):
+        inertias = []
+        for k in range(1, max_clusters + 1):
+            kmeans = KMeans(n_clusters=k, random_state=0)
+            kmeans.fit(data)
+            inertias.append(kmeans.inertia_)
+        optimal_clusters = np.argmin(np.diff(inertias)) + 3
+        return optimal_clusters
+
+    def visualize_kmeans_clustering(self):
+        try:
+            self.role = self.cb_role.currentText()
+            self.figureCluster.clear()
+            ax = self.figureCluster.add_subplot(111, projection='3d')
+            column_names = self.cluster.columns.tolist()
+            x_col, y_col, z_col = column_names[:3]
+            reverse_mapping = {v: k for k, v in self.columns_mapping.items()}
+            x_show = reverse_mapping.get(x_col.replace('mean_', ''), x_col)
+            y_show = reverse_mapping.get(y_col.replace('mean_', ''), y_col)
+            z_show = reverse_mapping.get(z_col.replace('mean_',''), z_col)
+            x = self.cluster[x_col]
+            y = self.cluster[y_col]
+            z = self.cluster[z_col]
+            cluster_labels = self.cluster['efficacy_cluster']
+            ax.scatter(x, y, z, c=cluster_labels, cmap='viridis')
+            ax.set_xlabel(x_show)
+            ax.set_ylabel(y_show)
+            ax.set_zlabel(z_show)
+            if self.role == "Laborer":
+                ax.set_title('Laborer Clustering')
+            else:
+                ax.set_title('Supervisor Clustering')
+            self.canvasCluster.draw()
+        except Exception as e:
+            print(e)
+
+    def load_cluster_model(self):
+        file_dialog = QFileDialog()
+        file_dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
+        file_dialog.setNameFilter("Pickle files (*.pkl)")
+        if file_dialog.exec():
+            selected_files = file_dialog.selectedFiles()
+            if selected_files:
+                file_path = selected_files[0]
+                loaded_object = FileUtil.loadModel(file_path)
+                if loaded_object is not None:
+                    if isinstance(loaded_object, pd.DataFrame): 
+                        self.cluster = loaded_object
+                        QMessageBox.information(self.MainWindow, "Success", "Cluster model loaded successfully.")
+                        self.visualize_kmeans_clustering()
+                    else:
+                        QMessageBox.warning(self.MainWindow, "Warning", "The loaded file is not a clustering model. Please load a KMeans clustering model.")
+                else:
+                    QMessageBox.warning(self.MainWindow, "Error", "Failed to load the model.")

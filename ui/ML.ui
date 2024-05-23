@@ -23,7 +23,7 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>40</x>
       <y>70</y>
       <width>1111</width>
       <height>631</height>
@@ -102,7 +102,7 @@
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
-      <widget class="QComboBox" name="comboBox_5">
+      <widget class="QComboBox" name="cb_role">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -126,17 +126,7 @@
        </item>
        <item>
         <property name="text">
-         <string>Shift Manager</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Leam Leader</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Production Director</string>
+         <string>Supervisor</string>
         </property>
        </item>
       </widget>
@@ -156,12 +146,12 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#00007f;&quot;&gt;Role&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="b_ClusterModel_4">
+      <widget class="QPushButton" name="b_VisualizeCluster">
        <property name="geometry">
         <rect>
-         <x>480</x>
+         <x>530</x>
          <y>70</y>
-         <width>171</width>
+         <width>111</width>
          <height>21</height>
         </rect>
        </property>
@@ -178,13 +168,13 @@ color: rgb(0, 0, 0);
 </string>
        </property>
        <property name="text">
-        <string>See Cluster analysis model</string>
+        <string>Visualize model</string>
        </property>
       </widget>
       <widget class="QPushButton" name="b_SaveCluster">
        <property name="geometry">
         <rect>
-         <x>260</x>
+         <x>210</x>
          <y>70</y>
          <width>91</width>
          <height>21</height>
@@ -209,7 +199,7 @@ color: rgb(0, 0, 0);
       <widget class="QPushButton" name="b_LoadCluster">
        <property name="geometry">
         <rect>
-         <x>370</x>
+         <x>320</x>
          <y>70</y>
          <width>81</width>
          <height>21</height>
@@ -231,6 +221,31 @@ color: rgb(0, 0, 0);
         <string>Load model</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="b_TrainCluster">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>70</y>
+         <width>81</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(226, 244, 255);
+color: rgb(0, 0, 0);
+</string>
+       </property>
+       <property name="text">
+        <string>Train model</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QWidget" name="verticalLayoutWidget_3">
       <property name="geometry">
@@ -241,7 +256,7 @@ color: rgb(0, 0, 0);
         <height>441</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3"/>
+      <layout class="QVBoxLayout" name="vl_VisualizeCluster"/>
      </widget>
     </widget>
     <widget class="QWidget" name="ML">
@@ -328,14 +343,6 @@ color: rgb(0, 0, 0);
          <height>91</height>
         </rect>
        </property>
-       <item>
-        <property name="text">
-         <string>Gender</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
        <item>
         <property name="text">
          <string>Age</string>
