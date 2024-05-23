@@ -1,10 +1,11 @@
 #app.py
 from PyQt6.QtWidgets import QApplication, QMainWindow
+from ui.LoginEx import LoginEx
 from ui.MainWindowEx import MainWindowEx
-
 app = QApplication([])
 mainWindow = QMainWindow()
-myWindow = MainWindowEx()
+myWindow = LoginEx()
 myWindow.setupUi(QMainWindow())
 myWindow.show()
-app.exec() 
+app.exec()
+

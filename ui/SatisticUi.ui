@@ -20,7 +20,7 @@
    <string>MainWindow</string>
   </property>
   <property name="windowOpacity">
-   <double>-1.000000000000000</double>
+   <double>1.000000000000000</double>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label_2">
@@ -160,7 +160,7 @@
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
-              <widget class="QComboBox" name="comboBox">
+              <widget class="QComboBox" name="cb_employee">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -172,22 +172,22 @@
                </property>
                <item>
                 <property name="text">
-                 <string>Rate of employees quitting by gender</string>
+                 <string>Distribution of gender</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Employee productivity by gender</string>
+                 <string>Distribution of age</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Statistics on employee work week</string>
+                 <string>Average worker in shifts by gender</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string/>
+                 <string>Top 5 resignation reasons</string>
                 </property>
                </item>
               </widget>
@@ -195,14 +195,14 @@
              <item>
               <widget class="QGroupBox" name="groupBox_2">
                <property name="title">
-                <string>GroupBox</string>
+                <string/>
                </property>
-               <widget class="QTableWidget" name="tableWidget">
+               <widget class="QTableWidget" name="tw_statEmployee">
                 <property name="geometry">
                  <rect>
-                  <x>-10</x>
-                  <y>0</y>
-                  <width>731</width>
+                  <x>20</x>
+                  <y>10</y>
+                  <width>691</width>
                   <height>101</height>
                  </rect>
                 </property>
@@ -210,36 +210,7 @@
                  <string notr="true">background-color: rgb(255, 255, 255);</string>
                 </property>
                </widget>
-               <widget class="QPushButton" name="pushButton_2">
-                <property name="geometry">
-                 <rect>
-                  <x>730</x>
-                  <y>70</y>
-                  <width>81</width>
-                  <height>29</height>
-                 </rect>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="autoFillBackground">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(255, 255, 255);</string>
-                </property>
-                <property name="text">
-                 <string>Clear</string>
-                </property>
-                <property name="icon">
-                 <iconset>
-                  <normaloff>../image/img_remove.png</normaloff>../image/img_remove.png</iconset>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="pushButton">
+               <widget class="QPushButton" name="b_showEmployee">
                 <property name="geometry">
                  <rect>
                   <x>830</x>
@@ -353,7 +324,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayoutPlot">
+           <layout class="QVBoxLayout" name="vl_Employee">
             <property name="sizeConstraint">
              <enum>QLayout::SetDefaultConstraint</enum>
             </property>
@@ -447,9 +418,9 @@
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_7">
              <item>
-              <widget class="QComboBox" name="comboBox_2">
+              <widget class="QComboBox" name="cb_performance">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -459,22 +430,22 @@
                </property>
                <item>
                 <property name="text">
-                 <string>Statistics on employee work week</string>
+                 <string>Average efficacy of each work group</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Rate of employees quitting by gender</string>
+                 <string>Average efficacy in groups with below-average and above-average health</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Employee productivity by gender</string>
+                 <string>Average efficacy in groups with below-average and above-average goodness</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string/>
+                 <string>Top 5 supervisors have most worker resignation</string>
                 </property>
                </item>
               </widget>
@@ -482,14 +453,14 @@
              <item>
               <widget class="QGroupBox" name="groupBox_7">
                <property name="title">
-                <string>GroupBox</string>
+                <string/>
                </property>
-               <widget class="QTableWidget" name="tableWidget_2">
+               <widget class="QTableWidget" name="tw_statPerformance">
                 <property name="geometry">
                  <rect>
-                  <x>-10</x>
-                  <y>0</y>
-                  <width>731</width>
+                  <x>10</x>
+                  <y>10</y>
+                  <width>691</width>
                   <height>101</height>
                  </rect>
                 </property>
@@ -497,36 +468,7 @@
                  <string notr="true">background-color: rgb(255, 255, 255);</string>
                 </property>
                </widget>
-               <widget class="QPushButton" name="pushButton_3">
-                <property name="geometry">
-                 <rect>
-                  <x>730</x>
-                  <y>70</y>
-                  <width>81</width>
-                  <height>29</height>
-                 </rect>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="autoFillBackground">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(255, 255, 255);</string>
-                </property>
-                <property name="text">
-                 <string>Clear</string>
-                </property>
-                <property name="icon">
-                 <iconset>
-                  <normaloff>../image/img_remove.png</normaloff>../image/img_remove.png</iconset>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="pushButton_4">
+               <widget class="QPushButton" name="b_showPerformance">
                 <property name="geometry">
                  <rect>
                   <x>830</x>
@@ -640,7 +582,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayoutPlot_2">
+           <layout class="QVBoxLayout" name="vl_performance">
             <property name="sizeConstraint">
              <enum>QLayout::SetDefaultConstraint</enum>
             </property>
