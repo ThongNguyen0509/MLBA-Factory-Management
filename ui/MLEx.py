@@ -3,25 +3,18 @@ from connector.Connector import Connector
 from ui.ML_ui import Ui_MLWindow
 from utils.FileUtil import FileUtil
 import traceback
-from xgboost import XGBRegressor
-from lightgbm import LGBMRegressor
 from sklearn.metrics import mean_squared_error, r2_score, silhouette_score
-from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLabel, QLineEdit, QFrame, QListWidgetItem, QFormLayout, QPushButton, QProgressDialog, QProgressBar
-from datetime import datetime
-from PyQt6.QtCore import Qt, QSize, QObject, pyqtSignal, QThread, QRunnable, QThreadPool, QVariant
+from PyQt6.QtWidgets import QFileDialog, QMessageBox, QLabel, QLineEdit, QFrame, QListWidgetItem, QFormLayout, QPushButton, QProgressBar, QMainWindow
+from ui.ChangeInformationEx import ChangeInformation
+from PyQt6.QtCore import Qt
 import pandas as pd
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.pipeline import Pipeline
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-import seaborn as sns
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.inspection import permutation_importance
-from mpl_toolkits.mplot3d import Axes3D
 
 class MLEx(Ui_MLWindow):
     def __init__(self):
@@ -60,14 +53,10 @@ class MLEx(Ui_MLWindow):
         self.b_SaveCluster.clicked.connect(self.save_model)
         self.b_TrainCluster.clicked.connect(self.perform_kmeans_clustering)
         self.b_LoadCluster.clicked.connect(self.load_cluster_model)
+        self.b_changeProfile.clicked.connect(self.openChangeInfo)
+        self.b_logout.clicked.connect(self.logout)
         self.setupPlotCluster()
         self.setupPlotPrediction()
-
-    def on_training_started(self):
-        print("KMeans training started.")
-
-    def on_training_completed(self):
-        print("KMeans training completed.")
 
     def setupPlotPrediction(self):
         figsize = (8, 6)
@@ -273,15 +262,16 @@ class MLEx(Ui_MLWindow):
     def perform_kmeans_clustering(self):
         try:
             self.connectdb()
-            sql = '''SELECT sub_ID, sub_age, sub_health_h, sub_commitment_h, sub_perceptiveness_h, sub_dexterity_h,
-                            sub_sociality_h, sup_sub_age_diff, sub_goodness_h, sub_strength_h, sub_openmindedness_h, actual_efficacy_h
-                            FROM factory WHERE record_comptype = "Efficacy"'''
-            df = self.connector.queryDataset(sql)
-            if df is not None:
-                filtered_df = df[['sub_ID', 'sub_age', 'sub_health_h', 'sub_commitment_h', 'sub_perceptiveness_h', 'sub_dexterity_h',
-                                'sub_sociality_h', 'sub_goodness_h', 'sub_strength_h', 'sub_openmindedness_h',
-                                'sup_sub_age_diff', 'actual_efficacy_h']]
-
+            role = self.cb_role.currentText()
+            if role == 'Laborer':
+                sql = '''SELECT sub_ID, sub_age, sub_health_h, sub_commitment_h, sub_perceptiveness_h, sub_dexterity_h,
+                                sub_sociality_h, sup_sub_age_diff, sub_goodness_h, sub_strength_h, sub_openmindedness_h, actual_efficacy_h
+                                FROM factory WHERE record_comptype = "Efficacy"'''
+                df = self.connector.queryDataset(sql)
+                if df is not None:
+                    filtered_df = df[['sub_ID', 'sub_age', 'sub_health_h', 'sub_commitment_h', 'sub_perceptiveness_h', 'sub_dexterity_h',
+                                    'sub_sociality_h', 'sub_goodness_h', 'sub_strength_h', 'sub_openmindedness_h',
+                                    'sup_sub_age_diff', 'actual_efficacy_h']]
                 X = filtered_df.drop('actual_efficacy_h', axis=1)
                 y = filtered_df['actual_efficacy_h']
 
@@ -289,21 +279,46 @@ class MLEx(Ui_MLWindow):
                 print(f"Best features: {best_features}")
 
                 numeric_features = [feature for feature in best_features if pd.api.types.is_numeric_dtype(filtered_df[feature])]
+                numeric_features.insert(0, 'actual_efficacy_h')  # Add 'actual_efficacy_h' as the first column
 
                 worker_stats = filtered_df.groupby('sub_ID').agg(
-                    mean_efficacy=('actual_efficacy_h', 'mean'),
                     **{f'mean_{feature}': (feature, 'mean') for feature in numeric_features}
                 ).reset_index()
 
-                data = worker_stats[['mean_efficacy'] + [f'mean_{feature}' for feature in numeric_features]]
-                optimal_clusters = self.find_optimal_clusters(data)
-                print(f"Optimal number of clusters: {optimal_clusters}")
+                data = worker_stats[[f'mean_{feature}' for feature in numeric_features]]
 
-                kmeans = KMeans(n_clusters=optimal_clusters, random_state=42)
+            elif role == "Supervisor":
+                sql = '''
+                        SELECT sup_ID, sup_age, sup_commitment_h, sup_perceptiveness_h, sup_goodness_h, actual_efficacy_h
+                        FROM factory
+                        WHERE record_comptype = 'Efficacy'
+                        '''
+                df = self.connector.queryDataset(sql)
+                filtered_df = df[['sup_ID', 'sup_age', 'sup_commitment_h', 'sup_perceptiveness_h', 'sup_goodness_h', 'actual_efficacy_h']]
+                X = filtered_df.drop('actual_efficacy_h', axis=1)
+                y = filtered_df['actual_efficacy_h']
 
-                data['efficacy_cluster'] = kmeans.fit_predict(data)
-                self.cluster = data
-                self.visualize_kmeans_clustering()
+                best_features = self.evaluate_feature_importance_for_clustering(X, y)
+                print(f"Best features: {best_features}")
+
+                numeric_features = [feature for feature in best_features if pd.api.types.is_numeric_dtype(filtered_df[feature])]
+                numeric_features.insert(0, 'sup_age')  # Add 'sup_age' as the first column
+                numeric_features.insert(1, 'actual_efficacy_h')  # Add 'actual_efficacy_h' as the second column
+
+                supervisor_stats = filtered_df.groupby('sup_ID').agg(
+                    **{f'mean_{feature}': (feature, 'mean') for feature in numeric_features}
+                ).reset_index()
+
+                data = supervisor_stats[[f'mean_{feature}' for feature in numeric_features]]
+
+            optimal_clusters = self.find_optimal_clusters(data)
+            print(f"Optimal number of clusters: {optimal_clusters}")
+
+            kmeans = KMeans(n_clusters=optimal_clusters, random_state=42)
+
+            data['efficacy_cluster'] = kmeans.fit_predict(data)
+            self.cluster = data
+            self.visualize_kmeans_clustering()
         except Exception as e:
             QMessageBox.warning(self.MainWindow, "Error", str(e))
             traceback.print_exc()
@@ -370,3 +385,17 @@ class MLEx(Ui_MLWindow):
                         QMessageBox.warning(self.MainWindow, "Warning", "The loaded file is not a clustering model. Please load a KMeans clustering model.")
                 else:
                     QMessageBox.warning(self.MainWindow, "Error", "Failed to load the model.")
+
+    def openChangeInfo(self):
+        window = QMainWindow()
+        self.chartUI = ChangeInformation()
+        self.chartUI.setupUi(window)
+        self.chartUI.show()
+
+    def logout(self):
+        self.MainWindow.close()
+        from ui.LoginEx import LoginEx
+        window = QMainWindow()
+        self.chartUI = LoginEx()
+        self.chartUI.setupUi(window)
+        self.chartUI.show()

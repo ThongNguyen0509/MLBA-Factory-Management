@@ -70,7 +70,7 @@ QPushButton{
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="registerPage_2">
         <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -153,7 +153,27 @@ QPushButton{
              </widget>
             </item>
             <item>
+             <widget class="QLineEdit" name="lineEdit">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="placeholderText">
+               <string>Name</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEdit_2">
+              <property name="placeholderText">
+               <string>Email</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QLineEdit" name="lineEdit_7">
+              <property name="echoMode">
+               <enum>QLineEdit::Password</enum>
+              </property>
               <property name="placeholderText">
                <string>Password</string>
               </property>
@@ -161,6 +181,9 @@ QPushButton{
             </item>
             <item>
              <widget class="QLineEdit" name="lineEdit_8">
+              <property name="echoMode">
+               <enum>QLineEdit::Password</enum>
+              </property>
               <property name="placeholderText">
                <string>Confirm Pasword</string>
               </property>
@@ -268,6 +291,19 @@ QPushButton{
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_10">
             <item>
+             <widget class="QLabel" name="label_15">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>Enter your information below</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_7">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -289,6 +325,9 @@ QPushButton{
             </item>
             <item alignment="Qt::AlignTop">
              <widget class="QLineEdit" name="lineEdit_10">
+              <property name="echoMode">
+               <enum>QLineEdit::Password</enum>
+              </property>
               <property name="placeholderText">
                <string>Password</string>
               </property>
@@ -309,13 +348,6 @@ QPushButton{
             </size>
            </property>
           </spacer>
-         </item>
-         <item alignment="Qt::AlignHCenter">
-          <widget class="QLabel" name="label_15">
-           <property name="text">
-            <string>Enter your information below</string>
-           </property>
-          </widget>
          </item>
          <item alignment="Qt::AlignHCenter">
           <widget class="QPushButton" name="pushButton_4">

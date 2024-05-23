@@ -732,7 +732,7 @@ border-color: rgb(0, 0, 127);</string>
      <string>Change Profile</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="b_logout">
     <property name="geometry">
      <rect>
       <x>1050</x>
