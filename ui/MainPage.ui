@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>931</width>
-    <height>513</height>
+    <width>914</width>
+    <height>579</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,63 +26,29 @@
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>660</x>
       <y>10</y>
       <width>31</width>
-      <height>31</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../MLBA-Factory-Management-main/MLBA-Factory-Management-main/image/img_flag.png</pixmap>
+     <pixmap>C:/Users/hoang/Downloads/MLBA-Factory-Management-main/MLBA-Factory-Management-main/image/language.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="b_Logout_2">
-    <property name="geometry">
-     <rect>
-      <x>800</x>
-      <y>10</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(229, 255, 169);</string>
-    </property>
-    <property name="text">
-     <string>Log out</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_9">
-    <property name="geometry">
-     <rect>
-      <x>570</x>
-      <y>10</y>
-      <width>81</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>English</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>130</y>
+      <y>160</y>
       <width>671</width>
-      <height>341</height>
+      <height>311</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -103,11 +69,21 @@
       <height>0</height>
      </size>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 254, 196);</string>
+     <string notr="true">background-color: rgb(232, 228, 254);</string>
     </property>
     <property name="title">
-     <string>Role for employee</string>
+     <string>Employee's information</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_6">
      <item>
@@ -117,6 +93,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>64</width>
+         <height>18</height>
+        </size>
        </property>
        <property name="sizeIncrement">
         <size>
@@ -152,66 +134,151 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>50</y>
+      <y>69</y>
       <width>671</width>
-      <height>80</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: qlineargradient(spread:pad, x1:0.412935, y1:0.074, x2:0.448, y2:0.835227, stop:0 rgba(193, 255, 145, 255), stop:1 rgba(255, 255, 187, 255));border-radius: 500px</string>
+     <string notr="true">background-color: rgb(233, 229, 255);
+border-radius: 20px</string>
     </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>230</x>
-      <y>70</y>
-      <width>276</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Tahoma</family>
-      <pointsize>12</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Wellcome to Wabisabi APP </string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>230</x>
-      <y>101</y>
-      <width>249</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Every things you need for statistic is in here</string>
-    </property>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>211</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI Variable Display Semib</family>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+background-color: rgb(233, 229, 255);</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You can manage everything from here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Cooper Black</family>
+       <pointsize>15</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(233, 229, 255);</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Hello Manager,&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>440</x>
+       <y>20</y>
+       <width>121</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>SVN-Androgyne</family>
+       <pointsize>22</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#34009c;&quot;&gt;Welcome&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>0</y>
+       <width>81</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>../image/img_hello.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>570</x>
+       <y>0</y>
+       <width>81</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>../image/img_hi.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-10</y>
+      <y>70</y>
       <width>181</width>
-      <height>501</height>
+      <height>401</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Constantia</family>
+     </font>
+    </property>
     <property name="styleSheet">
-     <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0.806, y2:0.403409, stop:0 rgba(193, 255, 145, 255), stop:1 rgba(255, 255, 187, 255));</string>
+     <string notr="true">border: 1px solid #B0BEC5;
+background-color: rgb(233, 229, 255);
+</string>
     </property>
     <widget class="QPushButton" name="pushButton_Models">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>240</y>
+       <y>180</y>
        <width>161</width>
        <height>51</height>
       </rect>
@@ -222,15 +289,21 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="font">
+      <font>
+       <family>Constantia</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 239, 174);</string>
+      <string notr="true">background-color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
       <string>Models</string>
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Images/ic_machine.png</normaloff>Images/ic_machine.png</iconset>
+       <normaloff>../image/img_models.png</normaloff>../image/img_models.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -243,97 +316,260 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>110</y>
+       <y>100</y>
        <width>161</width>
        <height>51</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Constantia</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 239, 174);</string>
+      <string notr="true">background-color: rgb(255, 255, 255)
+</string>
      </property>
      <property name="text">
       <string>Statistics</string>
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Images/ic_statistic.png</normaloff>Images/ic_statistic.png</iconset>
+       <normaloff>../image/img_statistic.png</normaloff>../image/img_statistic.png</iconset>
      </property>
      <property name="iconSize">
       <size>
        <width>30</width>
        <height>30</height>
       </size>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>20</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="locale">
+      <locale language="English" country="Kenya"/>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Pages&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_User">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>380</y>
+       <y>270</y>
        <width>161</width>
        <height>51</height>
       </rect>
      </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Ignored">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <family>Constantia</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 239, 174);</string>
+      <string notr="true">background-color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string>Change information</string>
+      <string>Change Information</string>
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>Images/ic_user.png</normaloff>Images/ic_user.png</iconset>
+       <normaloff>../image/img_inf.png</normaloff>../image/img_inf.png</iconset>
      </property>
      <property name="iconSize">
       <size>
-       <width>30</width>
+       <width>40</width>
        <height>30</height>
       </size>
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="Line" name="line">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
-      <width>181</width>
-      <height>71</height>
+      <y>50</y>
+      <width>891</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">color: rgb(0, 0, 127);
+border-color: rgb(0, 0, 127);</string>
     </property>
-    <property name="locale">
-     <locale language="English" country="Kenya"/>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>10</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Chosse resource&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../image/img_admin.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>0</y>
+      <width>71</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>91</width>
+      <height>81</height>
+     </size>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../image/img_logo.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_setName">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>10</y>
+      <width>121</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Welcome, </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>10</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>English</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_14">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>10</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>C:/Users/hoang/Downloads/image/img_language.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="b_Logout_2">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>20</y>
+      <width>75</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: qlineargradient(spread:pad, x1:0.403, y1:0.960227, x2:0.438, y2:0.0568182, stop:0 rgba(199, 243, 255, 255), stop:1 rgba(255, 255, 255, 255));
+
+</string>
+    </property>
+    <property name="text">
+     <string>Log Out</string>
     </property>
    </widget>
    <zorder>widget_2</zorder>
    <zorder>widget</zorder>
-   <zorder>label_2</zorder>
-   <zorder>label_3</zorder>
    <zorder>label_10</zorder>
-   <zorder>b_Logout_2</zorder>
-   <zorder>label_9</zorder>
    <zorder>groupBox</zorder>
-   <zorder>label</zorder>
+   <zorder>line</zorder>
+   <zorder>label_6</zorder>
+   <zorder>label_5</zorder>
+   <zorder>l_setName</zorder>
+   <zorder>label_13</zorder>
+   <zorder>label_14</zorder>
+   <zorder>b_Logout_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>931</width>
+     <width>914</width>
      <height>21</height>
     </rect>
    </property>

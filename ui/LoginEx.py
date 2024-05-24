@@ -103,15 +103,15 @@ class LoginEx(Ui_MainWindow):
         if self.connector.conn:
             try:
                 cursor = self.connector.conn.cursor()
-                cursor.execute("SELECT id, password FROM account WHERE username = %s", (username,))
+                cursor.execute("SELECT id, password, Name FROM account WHERE username = %s", (username,))
                 result = cursor.fetchone()
-
                 if result:
-                    user_id, stored_password = result
+                    user_id, stored_password, name = result
                     stored_password = stored_password.encode('utf-8')
                     if bcrypt.checkpw(password.encode('utf-8'), stored_password):
                         self.showMessage("Login successful!", QMessageBox.Icon.Information)
                         self.MainWindow.close()
+                        Constant.current_userName = name
                         Constant.current_userID = user_id
                         self.openMainPage()
                     else:

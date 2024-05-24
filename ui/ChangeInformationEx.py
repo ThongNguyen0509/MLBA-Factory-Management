@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QTableWidgetItem, QMessageBox
+from PyQt6.QtWidgets import QTableWidgetItem, QMessageBox, QMainWindow
 from ui.ChangeInformationUI_ui import Ui_MainWindow
 from connector.Connector import Connector
 from constant.constant import Constant

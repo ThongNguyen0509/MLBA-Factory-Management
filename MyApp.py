@@ -6,6 +6,6 @@ app = QApplication([])
 mainWindow = QMainWindow()
 myWindow = LoginEx()
 myWindow.setupUi(QMainWindow())
-myWindow.show()
+myWindow.show() 
 app.exec()
 

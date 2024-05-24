@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1003</width>
-    <height>826</height>
+    <height>732</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -23,14 +23,728 @@
    <double>1.000000000000000</double>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>971</width>
+      <height>611</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="icon">
+      <iconset>
+       <normaloff>../image/img_emp.png</normaloff>../image/img_emp.png</iconset>
+     </attribute>
+     <attribute name="title">
+      <string>Employee</string>
+     </attribute>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>236</y>
+        <width>962</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(197, 255, 158);</string>
+      </property>
+      <property name="text">
+       <string>Chart Visualization</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>4</y>
+        <width>962</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(197, 255, 158);</string>
+      </property>
+      <property name="text">
+       <string>Data Visualization</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>30</y>
+        <width>962</width>
+        <height>200</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>0</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(232, 255, 221);</string>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="minimumSize">
+          <size>
+           <width>400</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>400</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(191, 231, 217);</string>
+         </property>
+         <property name="title">
+          <string>Chosen Variable of Employee</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QTableWidget" name="tw_statEmployee">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>781</width>
+               <height>101</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(255, 255, 255);</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="b_showEmployee">
+             <property name="geometry">
+              <rect>
+               <x>810</x>
+               <y>120</y>
+               <width>81</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(255, 255, 255);</string>
+             </property>
+             <property name="text">
+              <string>Show</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../image/img_show.png</normaloff>../image/img_show.png</iconset>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="cb_employee">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>291</width>
+               <height>18</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(255, 255, 255);</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>Distribution of gender</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Distribution of age</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Average worker in shifts by gender</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Top 5 resignation reasons</string>
+              </property>
+             </item>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>262</y>
+        <width>962</width>
+        <height>311</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(232, 255, 221);</string>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QVBoxLayout" name="vl_Employee">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+         <item>
+          <widget class="QFrame" name="frame">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="icon">
+      <iconset>
+       <normaloff>../image/img_kpi.png</normaloff>../image/img_kpi.png</iconset>
+     </attribute>
+     <attribute name="title">
+      <string>Performance</string>
+     </attribute>
+     <widget class="QGroupBox" name="groupBox_8">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>260</y>
+        <width>962</width>
+        <height>321</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(232, 255, 221);</string>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <layout class="QVBoxLayout" name="vl_performance">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+         <item>
+          <widget class="QFrame" name="frame_2">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>2</y>
+        <width>962</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(197, 255, 158);</string>
+      </property>
+      <property name="text">
+       <string>Data Visualization</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>234</y>
+        <width>962</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(197, 255, 158);</string>
+      </property>
+      <property name="text">
+       <string>Chart Visualization</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_5">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>28</y>
+        <width>962</width>
+        <height>200</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>0</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(232, 255, 221);</string>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="minimumSize">
+          <size>
+           <width>400</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>400</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(191, 231, 217);</string>
+         </property>
+         <property name="title">
+          <string>Chosen Variable of Performance</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QComboBox" name="cb_performance">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Average efficacy of each work group</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Average efficacy in groups with below-average and above-average health</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Average efficacy in groups with below-average and above-average goodness</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Top 5 supervisors have most worker resignation</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_7">
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QTableWidget" name="tw_statPerformance">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>781</width>
+               <height>91</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(255, 255, 255);</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="b_showPerformance">
+             <property name="geometry">
+              <rect>
+               <x>810</x>
+               <y>80</y>
+               <width>81</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>15</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(255, 255, 255);</string>
+             </property>
+             <property name="text">
+              <string>Show</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../image/img_show.png</normaloff>../image/img_show.png</iconset>
+             </property>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>40</y>
+      <width>971</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 127);
+border-color: rgb(0, 0, 127);</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="b_logout">
+    <property name="geometry">
+     <rect>
+      <x>870</x>
+      <y>20</y>
+      <width>75</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: qlineargradient(spread:pad, x1:0.403, y1:0.960227, x2:0.438, y2:0.0568182, stop:0 rgba(199, 243, 255, 255), stop:1 rgba(255, 255, 255, 255));
+
+</string>
+    </property>
+    <property name="text">
+     <string>Log Out</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>20</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>English</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_setName">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>10</y>
+      <width>51</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Welcome,</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="b_back">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../image/img_back.png</normaloff>../image/img_back.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>23</width>
+      <height>23</height>
+     </size>
+    </property>
+    <property name="autoExclusive">
+     <bool>false</bool>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>0</y>
-      <width>101</width>
+      <x>50</x>
+      <y>-10</y>
+      <width>81</width>
       <height>71</height>
      </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>91</width>
+      <height>81</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
@@ -42,20 +756,23 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>20</y>
+      <x>140</x>
+      <y>10</y>
       <width>31</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../image/img_flag.png</pixmap>
+     <pixmap>../image/img_admin.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -64,596 +781,28 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>20</y>
-      <width>81</width>
-      <height>31</height>
+      <x>730</x>
+      <y>10</y>
+      <width>41</width>
+      <height>41</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-     </font>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
-     <string>English</string>
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../image/language.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>70</y>
-      <width>971</width>
-      <height>671</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>Employee</string>
-     </attribute>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>964</width>
-        <height>631</height>
-       </rect>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="1" colspan="2">
-        <widget class="QGroupBox" name="groupBox_3">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>200</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>200</height>
-          </size>
-         </property>
-         <property name="baseSize">
-          <size>
-           <width>0</width>
-           <height>200</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(232, 255, 221);</string>
-         </property>
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <widget class="QGroupBox" name="groupBox">
-            <property name="minimumSize">
-             <size>
-              <width>400</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="baseSize">
-             <size>
-              <width>400</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(191, 231, 217);</string>
-            </property>
-            <property name="title">
-             <string>Chosen Variable of Employee</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_6">
-             <item>
-              <widget class="QComboBox" name="cb_employee">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-color: rgb(255, 255, 255);</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>Distribution of gender</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Distribution of age</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Average worker in shifts by gender</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Top 5 resignation reasons</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QGroupBox" name="groupBox_2">
-               <property name="title">
-                <string/>
-               </property>
-               <widget class="QTableWidget" name="tw_statEmployee">
-                <property name="geometry">
-                 <rect>
-                  <x>20</x>
-                  <y>10</y>
-                  <width>691</width>
-                  <height>101</height>
-                 </rect>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(255, 255, 255);</string>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="b_showEmployee">
-                <property name="geometry">
-                 <rect>
-                  <x>830</x>
-                  <y>70</y>
-                  <width>81</width>
-                  <height>29</height>
-                 </rect>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(255, 255, 255);</string>
-                </property>
-                <property name="text">
-                 <string>Show</string>
-                </property>
-                <property name="icon">
-                 <iconset>
-                  <normaloff>../image/img_show.png</normaloff>../image/img_show.png</iconset>
-                </property>
-               </widget>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1" colspan="2">
-        <widget class="QLabel" name="label">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>20</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(197, 255, 158);</string>
-         </property>
-         <property name="text">
-          <string>Data Visualization</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="2">
-        <widget class="QLabel" name="label_3">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>20</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(197, 255, 158);</string>
-         </property>
-         <property name="text">
-          <string>Chart Visualization</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="2">
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(232, 255, 221);</string>
-         </property>
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <layout class="QVBoxLayout" name="vl_Employee">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetDefaultConstraint</enum>
-            </property>
-            <item>
-             <widget class="QFrame" name="frame">
-              <property name="styleSheet">
-               <string notr="true">background-color: rgb(255, 255, 255);</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Performance</string>
-     </attribute>
-     <widget class="QWidget" name="layoutWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>964</width>
-        <height>631</height>
-       </rect>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="1" colspan="2">
-        <widget class="QGroupBox" name="groupBox_5">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>200</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>200</height>
-          </size>
-         </property>
-         <property name="baseSize">
-          <size>
-           <width>0</width>
-           <height>200</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(232, 255, 221);</string>
-         </property>
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <item>
-           <widget class="QGroupBox" name="groupBox_6">
-            <property name="minimumSize">
-             <size>
-              <width>400</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="baseSize">
-             <size>
-              <width>400</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(191, 231, 217);</string>
-            </property>
-            <property name="title">
-             <string>Chosen Variable of Performance</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_7">
-             <item>
-              <widget class="QComboBox" name="cb_performance">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-color: rgb(255, 255, 255);</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>Average efficacy of each work group</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Average efficacy in groups with below-average and above-average health</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Average efficacy in groups with below-average and above-average goodness</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Top 5 supervisors have most worker resignation</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QGroupBox" name="groupBox_7">
-               <property name="title">
-                <string/>
-               </property>
-               <widget class="QTableWidget" name="tw_statPerformance">
-                <property name="geometry">
-                 <rect>
-                  <x>10</x>
-                  <y>10</y>
-                  <width>691</width>
-                  <height>101</height>
-                 </rect>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(255, 255, 255);</string>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="b_showPerformance">
-                <property name="geometry">
-                 <rect>
-                  <x>830</x>
-                  <y>70</y>
-                  <width>81</width>
-                  <height>29</height>
-                 </rect>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-color: rgb(255, 255, 255);</string>
-                </property>
-                <property name="text">
-                 <string>Show</string>
-                </property>
-                <property name="icon">
-                 <iconset>
-                  <normaloff>../image/img_show.png</normaloff>../image/img_show.png</iconset>
-                </property>
-               </widget>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1" colspan="2">
-        <widget class="QLabel" name="label_6">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>20</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(197, 255, 158);</string>
-         </property>
-         <property name="text">
-          <string>Data Visualization</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="2">
-        <widget class="QLabel" name="label_7">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>20</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(197, 255, 158);</string>
-         </property>
-         <property name="text">
-          <string>Chart Visualization</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="2">
-        <widget class="QGroupBox" name="groupBox_8">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(232, 255, 221);</string>
-         </property>
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_8">
-          <item>
-           <layout class="QVBoxLayout" name="vl_performance">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetDefaultConstraint</enum>
-            </property>
-            <item>
-             <widget class="QFrame" name="frame_2">
-              <property name="styleSheet">
-               <string notr="true">background-color: rgb(255, 255, 255);</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-   </widget>
-   <widget class="QPushButton" name="b_changeInfo">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>20</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Change Info</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="b_openModel">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>20</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Open Models</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="b_Logout">
-    <property name="geometry">
-     <rect>
-      <x>870</x>
-      <y>20</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Log out</string>
-    </property>
-   </widget>
-   <zorder>label_2</zorder>
-   <zorder>label_5</zorder>
-   <zorder>tabWidget</zorder>
-   <zorder>b_changeInfo</zorder>
-   <zorder>label_4</zorder>
-   <zorder>b_openModel</zorder>
-   <zorder>b_Logout</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
