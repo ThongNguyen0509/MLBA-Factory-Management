@@ -7,6 +7,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from ui.MLEx import MLEx
 import matplotlib.pyplot as plt
 from constant.constant import Constant
+import pandas as pd
 
 class StatisticsEx(Ui_MainWindow):
     def __init__(self):
@@ -22,7 +23,7 @@ class StatisticsEx(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
-        self.l_setName.setText(f"Welcome, {Constant.current_userName}")
+        self.l_setName.setText(f"Welcome {Constant.current_userName}")
         self.b_showPerformance.clicked.connect(self.show_performance_statistics)
         self.b_showEmployee.clicked.connect(self.show_employee_statistics)
         self.setupPlotPerformance()
@@ -95,10 +96,10 @@ class StatisticsEx(Ui_MainWindow):
                 group by sub_workstyle_h
                 order by AverageEfficacy desc
                 '''
-        self.figurePerformance.set_size_inches(8,2)
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statPerformance, df)
         self.figurePerformance.clear()
+        self.figurePerformance.set_size_inches(8,2)
         ax = self.figurePerformance.add_subplot(111)
         ax.bar(df['Workgroup'], df['AverageEfficacy'])
         ax.set_xlabel('Workgroup')
@@ -194,7 +195,7 @@ class StatisticsEx(Ui_MainWindow):
 
     def show_gender_distribution(self):
         self.connectdb()
-        sql = "SELECT sub_sex AS Gender, COUNT(*) AS Count FROM factory WHERE record_comptype = 'Efficacy' GROUP BY sub_sex"
+        sql = "SELECT sub_sex AS Gender, COUNT(distinct sub_ID) AS Count FROM factory WHERE record_comptype = 'Efficacy' GROUP BY sub_sex"
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statEmployee, df)
         self.figureEmployee.clear()
@@ -208,11 +209,11 @@ class StatisticsEx(Ui_MainWindow):
 
     def show_age_distribution(self):
         self.connectdb()
-        sql = "SELECT sub_age AS Age, COUNT(*) AS Count FROM factory WHERE record_comptype = 'Efficacy' GROUP BY sub_age"
+        sql = "SELECT sub_age AS Age, COUNT(distinct sub_ID) AS Count FROM factory WHERE record_comptype = 'Efficacy' GROUP BY sub_age"
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statEmployee, df)
         self.figureEmployee.clear()
-        self.figurePerformance.set_size_inches(6,2)
+        self.figurePerformance.set_size_inches(8,2)
         ax = self.figureEmployee.add_subplot(111)
         ax.bar(df['Age'], df['Count'])
         ax.set_xlabel('Age')
@@ -223,26 +224,48 @@ class StatisticsEx(Ui_MainWindow):
     def average_worker_in_shifts_by_gender(self):
         self.connectdb()
         sql = """
-        SELECT
-            sub_sex AS Gender,
-            sub_shift AS Shift,
-            COUNT(DISTINCT event_date) AS Count
-        FROM
-            factory
-        WHERE
-            record_comptype = 'Efficacy'
-        GROUP BY
-            sub_sex, sub_shift
+                WITH SubIDCount AS (
+                    SELECT
+                        sub_sex AS Gender,
+                        sub_shift AS Shift,
+                        event_date,
+                        COUNT(DISTINCT sub_id) AS SubIDCount
+                    FROM
+                        factory
+                    WHERE
+                        record_comptype = 'Efficacy'
+                    GROUP BY
+                        sub_sex, sub_shift, event_date
+                ),
+                ShiftAverage AS (
+                    SELECT
+                        Gender,
+                        Shift,
+                        AVG(SubIDCount) AS AverageWorker
+                    FROM
+                        SubIDCount
+                    GROUP BY
+                        Gender, Shift
+                )
+                SELECT
+                    sa.Gender,
+                    sa.Shift,
+                    sa.AverageWorker
+                FROM
+                    ShiftAverage sa
+                ORDER BY
+                    sa.Shift, sa.Gender;
         """    
         df = self.connector.queryDataset(sql)
+        df['AverageWorker'] = pd.to_numeric(df['AverageWorker'], errors='coerce')
         self.showDataIntoTableWidget(self.tw_statEmployee, df)
         self.figureEmployee.clear()
-        self.figurePerformance.set_size_inches(6,2)
         ax = self.figureEmployee.add_subplot(111)
-        pivot_table = df.pivot_table(index='Gender', columns='Shift', values='Count', aggfunc='sum')
+        self.figurePerformance.set_size_inches(8,2)
+        pivot_table = df.pivot_table(index='Gender', columns='Shift', values='AverageWorker', aggfunc='sum')
         pivot_table.plot(kind='bar', ax=ax, rot=0)
         ax.set_xlabel('Gender')
-        ax.set_ylabel('Count')
+        ax.set_ylabel('Average Worker')
         ax.set_title('Average Worker in Shifts by Gender')
         ax.legend(title='Shift')
         self.canvasEmployee.draw()
@@ -253,12 +276,13 @@ class StatisticsEx(Ui_MainWindow):
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statEmployee, df)
         self.figureEmployee.clear()
-        self.figurePerformance.set_size_inches(6,2)
         ax = self.figureEmployee.add_subplot(111)
-        ax.bar(df['ResignReason'], df['Count'])
+        self.figurePerformance.set_size_inches(8,2)
+        ax.bar(df['ResignReason'], df['Count'],width=0.6)
         ax.set_xlabel('Resignation Reason')
         ax.set_ylabel('Count')
         ax.set_title('Top 5 Resignation Reasons')
+        ax.set_xticklabels(df['ResignReason'], fontsize=8)
         self.canvasEmployee.draw()
 
     def change_stats_performance(self):

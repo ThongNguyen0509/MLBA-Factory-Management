@@ -47,7 +47,7 @@ class MLEx(Ui_MLWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
-        self.l_setName.setText(f"Welcome, {Constant.current_userName}")
+        self.l_setName.setText(f"Welcome {Constant.current_userName}")
         self.b_trainEfficiency.clicked.connect(self.train_model)
         self.b_saveEfficiency.clicked.connect(self.save_model)
         self.b_loadEfficiency.clicked.connect(self.load_model_predict)
