@@ -336,7 +336,7 @@ class Ui_MLWindow(object):
         MLWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MLWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MLWindow)
 
     def retranslateUi(self, MLWindow):
@@ -345,7 +345,7 @@ class Ui_MLWindow(object):
         self.tabWidget.setToolTip(_translate("MLWindow", "<html><head/><body><p>Machine Learning</p></body></html>"))
         self.groupBox_4.setTitle(_translate("MLWindow", "Employee\'s Information"))
         self.cb_role.setItemText(0, _translate("MLWindow", "Laborer"))
-        self.cb_role.setItemText(1, _translate("MLWindow", "Leam Leader"))
+        self.cb_role.setItemText(1, _translate("MLWindow", "Supervisor"))
         self.label_14.setToolTip(_translate("MLWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
         self.label_14.setText(_translate("MLWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600; color:#00007f;\">Role</span></p></body></html>"))
         self.b_TrainCluster.setText(_translate("MLWindow", "Train Model"))

@@ -9,3 +9,4 @@ myWindow.setupUi(QMainWindow())
 myWindow.show() 
 app.exec()
 
+1   

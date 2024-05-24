@@ -73,6 +73,21 @@ class LoginEx(Ui_MainWindow):
 
         if self.connector.conn:
             try:
+                cursor = self.connector.conn.cursor()
+                cursor.execute("SELECT COUNT(*) FROM account WHERE username = %s", (username,))
+                username_exists = cursor.fetchone()[0]
+
+                cursor.execute("SELECT COUNT(*) FROM account WHERE email = %s", (email,))
+                email_exists = cursor.fetchone()[0]
+
+                if username_exists:
+                    self.showMessage("Username already exists.", QMessageBox.Icon.Warning)
+                    return
+
+                if email_exists:
+                    self.showMessage("Email already exists.", QMessageBox.Icon.Warning)
+                    return
+
                 self.connector.commitQuery(
                     "INSERT INTO account (username, name, email, password) VALUES (%s, %s, %s, %s)",
                     (username, name, email, hashed_password)
@@ -81,10 +96,6 @@ class LoginEx(Ui_MainWindow):
                 self.toLogin()
             except Exception as e:
                 self.showMessage(f"An error occurred: {e}", QMessageBox.Icon.Critical)
-            finally:
-                self.connector.disConnect()
-        else:
-            self.showMessage("Database connection failed.", QMessageBox.Icon.Critical)
 
     def openMainPage(self):
         window = QMainWindow()
