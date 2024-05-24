@@ -1,4 +1,5 @@
 from multithread.EfficacyThread import VisWorker, ModelWorker
+from constant.constant import Constant
 from connector.Connector import Connector
 from ui.ML_ui import Ui_MLWindow
 from utils.FileUtil import FileUtil
@@ -46,6 +47,7 @@ class MLEx(Ui_MLWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
+        self.l_setName.setText(f"Welcome, {Constant.current_userName}")
         self.b_trainEfficiency.clicked.connect(self.train_model)
         self.b_saveEfficiency.clicked.connect(self.save_model)
         self.b_loadEfficiency.clicked.connect(self.load_model_predict)
@@ -53,8 +55,8 @@ class MLEx(Ui_MLWindow):
         self.b_SaveCluster.clicked.connect(self.save_model)
         self.b_TrainCluster.clicked.connect(self.perform_kmeans_clustering)
         self.b_LoadCluster.clicked.connect(self.load_cluster_model)
-        self.b_changeProfile.clicked.connect(self.openChangeInfo)
         self.b_logout.clicked.connect(self.logout)
+        self.b_back.clicked.connect(self.back_main_page)
         self.setupPlotCluster()
         self.setupPlotPrediction()
 
@@ -237,7 +239,7 @@ class MLEx(Ui_MLWindow):
             y = pd.to_numeric(y, errors='coerce')
             y_pred = pd.to_numeric(y_pred, errors='coerce')
             self.figurePrediction.clear()
-            self.figurePrediction.set_size_inches(8, 3.8)
+            self.figurePrediction.set_size_inches(8, 2)
             ax = self.figurePrediction.add_subplot(111)
             ax.ticklabel_format(useOffset=False, style='plain')
             ax.grid()
@@ -397,5 +399,13 @@ class MLEx(Ui_MLWindow):
         from ui.LoginEx import LoginEx
         window = QMainWindow()
         self.chartUI = LoginEx()
+        self.chartUI.setupUi(window)
+        self.chartUI.show()
+
+    def back_main_page(self):
+        from ui.MainWindowEx import MainWindowEx
+        window = QMainWindow()
+        self.MainWindow.close()
+        self.chartUI = MainWindowEx()
         self.chartUI.setupUi(window)
         self.chartUI.show()

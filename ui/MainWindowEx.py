@@ -8,6 +8,7 @@ from connector.Connector import Connector
 from ui.MLEx import MLEx
 from ui.StatisticEx import StatisticsEx
 from ui.ChangeInformationEx import ChangeInformation
+from constant.constant import Constant
 
 class MainWindowEx(Ui_MainWindow):
     def __init__(self):
@@ -17,6 +18,7 @@ class MainWindowEx(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow=MainWindow
+        self.l_setName.setText(f"Welcome, {Constant.current_userName}")
         self.pushButton_Models.clicked.connect(self.openModels)
         self.pushButton_Statistic.clicked.connect(self.openStatistics)
         self.pushButton_User.clicked.connect(self.openChangeInfo)
@@ -36,12 +38,14 @@ class MainWindowEx(Ui_MainWindow):
         self.MainWindow.show()
 
     def openModels(self):
+        self.MainWindow.close()
         window = QMainWindow()
         self.chartUI = MLEx()
         self.chartUI.setupUi(window)
         self.chartUI.show() 
 
     def openStatistics(self):
+        self.MainWindow.close()
         window = QMainWindow()
         self.chartUI = StatisticsEx()
         self.chartUI.setupUi(window)

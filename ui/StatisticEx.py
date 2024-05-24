@@ -6,6 +6,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from ui.MLEx import MLEx
 import matplotlib.pyplot as plt
+from constant.constant import Constant
 
 class StatisticsEx(Ui_MainWindow):
     def __init__(self):
@@ -21,16 +22,29 @@ class StatisticsEx(Ui_MainWindow):
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.MainWindow = MainWindow
+        self.l_setName.setText(f"Welcome, {Constant.current_userName}")
         self.b_showPerformance.clicked.connect(self.show_performance_statistics)
         self.b_showEmployee.clicked.connect(self.show_employee_statistics)
         self.setupPlotPerformance()
         self.setupPlotEmployee()
         self.cb_performance.currentTextChanged.connect(self.change_stats_performance)
         self.cb_employee.currentTextChanged.connect(self.change_stats_employee)
-        self.b_Logout.clicked.connect(self.logout)
+        self.b_logout.clicked.connect(self.logout)
+        self.tabWidget.currentChanged.connect(self.clearFig)
+        self.b_back.clicked.connect(self.back_main_page)
+
     def show(self):
         self.MainWindow.show()
 
+    def clearFig(self):
+        self.figureEmployee.clear()
+        self.canvasEmployee.draw() 
+        self.figurePerformance.clear()
+        self.canvasPerformance.draw()
+        self.tw_statEmployee.setRowCount(0)
+        self.tw_statEmployee.setColumnCount(0)
+        self.tw_statPerformance.setRowCount(0)
+        self.tw_statPerformance.setColumnCount(0)         
 
     def setupPlotPerformance(self):
         self.figurePerformance = plt.figure()
@@ -81,7 +95,7 @@ class StatisticsEx(Ui_MainWindow):
                 group by sub_workstyle_h
                 order by AverageEfficacy desc
                 '''
-        self.figurePerformance.set_size_inches(8,2.8)
+        self.figurePerformance.set_size_inches(8,2)
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statPerformance, df)
         self.figurePerformance.clear()
@@ -105,7 +119,7 @@ class StatisticsEx(Ui_MainWindow):
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statPerformance, df)
         self.figurePerformance.clear()
-        self.figurePerformance.set_size_inches(8,2.8)
+        self.figurePerformance.set_size_inches(8,2)
         ax = self.figurePerformance.add_subplot(111)
         ax.bar(df['SupervisorName'], df['ResignationCount']) 
         ax.set_xlabel('Supervisor')
@@ -131,7 +145,7 @@ class StatisticsEx(Ui_MainWindow):
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statPerformance, df)
         self.figurePerformance.clear()
-        self.figurePerformance.set_size_inches(8,2.8)
+        self.figurePerformance.set_size_inches(8,2)
         ax = self.figurePerformance.add_subplot(111)
         ax.bar(df['HealthGroup'], df['AverageEfficacy'])
         ax.set_xlabel('Health Group')
@@ -157,7 +171,7 @@ class StatisticsEx(Ui_MainWindow):
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statPerformance, df)
         self.figurePerformance.clear()
-        self.figurePerformance.set_size_inches(8,2.8)
+        self.figurePerformance.set_size_inches(8,2)
         ax = self.figurePerformance.add_subplot(111)
         ax.bar(df['GoodnessGroup'], df['AverageEfficacy'])
         ax.set_xlabel('Goodness Group')
@@ -184,7 +198,7 @@ class StatisticsEx(Ui_MainWindow):
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statEmployee, df)
         self.figureEmployee.clear()
-        self.figurePerformance.set_size_inches(8,2.3)
+        self.figurePerformance.set_size_inches(8,2)
         ax = self.figureEmployee.add_subplot(111)
         ax.bar(df['Gender'], df['Count'])
         ax.set_xlabel('Gender')
@@ -198,7 +212,7 @@ class StatisticsEx(Ui_MainWindow):
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statEmployee, df)
         self.figureEmployee.clear()
-        self.figurePerformance.set_size_inches(8,2.3)
+        self.figurePerformance.set_size_inches(6,2)
         ax = self.figureEmployee.add_subplot(111)
         ax.bar(df['Age'], df['Count'])
         ax.set_xlabel('Age')
@@ -208,11 +222,22 @@ class StatisticsEx(Ui_MainWindow):
 
     def average_worker_in_shifts_by_gender(self):
         self.connectdb()
-        sql = "SELECT sub_sex AS Gender, sub_shift AS Shift, COUNT(*) AS Count FROM factory WHERE record_comptype = 'Efficacy' GROUP BY sub_sex, sub_shift"
+        sql = """
+        SELECT
+            sub_sex AS Gender,
+            sub_shift AS Shift,
+            COUNT(DISTINCT event_date) AS Count
+        FROM
+            factory
+        WHERE
+            record_comptype = 'Efficacy'
+        GROUP BY
+            sub_sex, sub_shift
+        """    
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statEmployee, df)
         self.figureEmployee.clear()
-        self.figurePerformance.set_size_inches(8,2.3)
+        self.figurePerformance.set_size_inches(6,2)
         ax = self.figureEmployee.add_subplot(111)
         pivot_table = df.pivot_table(index='Gender', columns='Shift', values='Count', aggfunc='sum')
         pivot_table.plot(kind='bar', ax=ax, rot=0)
@@ -220,7 +245,6 @@ class StatisticsEx(Ui_MainWindow):
         ax.set_ylabel('Count')
         ax.set_title('Average Worker in Shifts by Gender')
         ax.legend(title='Shift')
-
         self.canvasEmployee.draw()
 
     def top5_resignations_reason(self):
@@ -229,7 +253,7 @@ class StatisticsEx(Ui_MainWindow):
         df = self.connector.queryDataset(sql)
         self.showDataIntoTableWidget(self.tw_statEmployee, df)
         self.figureEmployee.clear()
-        self.figurePerformance.set_size_inches(8,2.3)
+        self.figurePerformance.set_size_inches(6,2)
         ax = self.figureEmployee.add_subplot(111)
         ax.bar(df['ResignReason'], df['Count'])
         ax.set_xlabel('Resignation Reason')
@@ -254,5 +278,13 @@ class StatisticsEx(Ui_MainWindow):
         from ui.LoginEx import LoginEx
         window = QMainWindow()
         self.chartUI = LoginEx()
+        self.chartUI.setupUi(window)
+        self.chartUI.show()
+
+    def back_main_page(self):
+        from ui.MainWindowEx import MainWindowEx
+        window = QMainWindow()
+        self.MainWindow.close()
+        self.chartUI = MainWindowEx()
         self.chartUI.setupUi(window)
         self.chartUI.show()

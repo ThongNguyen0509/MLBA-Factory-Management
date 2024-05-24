@@ -74,7 +74,7 @@ class ModelWorker(QThread):
             self.error_occurred.emit("Please select at least one column to train the model.")
             return
 
-        sql = '''SELECT sub_age, sub_health_h, sub_commitment_h, sub_perceptiveness_h, sub_dexterity_h
+        sql = '''SELECT sub_age, sub_health_h, sub_commitment_h, sub_perceptiveness_h, sub_dexterity_h,
                 sub_sociality_h, sub_goodness_h, sub_strength_h, sub_openmindedness_h, sup_sub_age_diff, actual_efficacy_h FROM factory WHERE record_comptype = "Efficacy"
             '''
         df = self.connector.queryDataset(sql)

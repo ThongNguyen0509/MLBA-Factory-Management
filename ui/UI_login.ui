@@ -267,7 +267,7 @@ QPushButton{
            </property>
           </widget>
          </item>
-         <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+         <item alignment="Qt::AlignHCenter">
           <widget class="QLabel" name="label_14">
            <property name="font">
             <font>
@@ -282,6 +282,22 @@ QPushButton{
           </widget>
          </item>
          <item>
+          <spacer name="verticalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QFrame" name="frame_4">
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
@@ -290,7 +306,7 @@ QPushButton{
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_10">
-            <item>
+            <item alignment="Qt::AlignLeft">
              <widget class="QLabel" name="label_15">
               <property name="layoutDirection">
                <enum>Qt::LeftToRight</enum>
@@ -304,14 +320,17 @@ QPushButton{
              </widget>
             </item>
             <item>
-             <spacer name="verticalSpacer_7">
+             <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
-                <height>68</height>
+                <height>15</height>
                </size>
               </property>
              </spacer>
@@ -336,27 +355,29 @@ QPushButton{
            </layout>
           </widget>
          </item>
-         <item>
-          <spacer name="verticalSpacer_8">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
          <item alignment="Qt::AlignHCenter">
           <widget class="QPushButton" name="pushButton_4">
+           <property name="minimumSize">
+            <size>
+             <width>260</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>260</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
            <property name="text">
             <string>Login</string>
            </property>
           </widget>
          </item>
-         <item alignment="Qt::AlignHCenter">
+         <item>
           <widget class="QPushButton" name="to_register_2">
            <property name="font">
             <font>
@@ -374,6 +395,22 @@ QPushButton{
             <string>WabiSabi Group.</string>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>17</width>
+             <height>83</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>
